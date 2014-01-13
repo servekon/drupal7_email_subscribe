@@ -382,6 +382,7 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
     
     $from = variable_get('email_subscribe_from_email', 'admin@localhost.ru');
     $params = array();
+    $isAdmin = user_access('administer email_subscribe');;
     if(!empty($from)){
         $body = variable_get($arrBody[$type], '');
         if(is_array($body)){
@@ -421,10 +422,10 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
                     $admEmail = variable_get('site_mail');
                     $params['message'] = t('@email has been @type.', array('@email'=>$to, '@type'=>t($arrAdm[$type])));
                     $toAdmin = drupal_mail('email_subscribe', 'admin_notice', $admEmail, $language, $params, $from, $send);
-                    if($toAdmin['result'] == TRUE){
+                    if($toAdmin['result'] == TRUE and $isAdmin){
                         drupal_set_message(t('Notification to the site administrator has been sent.'), 'status', FALSE);
                     }
-                    else{
+                    elseif($toAdmin['result'] == FALSE and $isAdmin){
                         drupal_set_message(t('Notification to the site administrator has been NOT sent.'), 'warning', FALSE);
                     }
                 }
