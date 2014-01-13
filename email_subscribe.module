@@ -411,7 +411,7 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
             $result = drupal_mail('email_subscribe', $arrKeys[$type], $to, $language, $params, $from, $send);
             if ($result['result'] == TRUE) {
                 if(!empty($type)){
-                    drupal_set_message(t('Your message has been sent.'), 'status', FALSE);
+                    drupal_set_message(t('In your e-mail address sent an email with further instructions.'), 'status', FALSE);
                 }
                 else{
                     drupal_set_message(t('Subscribe email successful.'), 'status', FALSE);
