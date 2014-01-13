@@ -426,8 +426,7 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
             ->execute();
             if(!empty($res)){
                 $nids = db_select('node', 'n')
-                ->fields('n', array('nid'))
-                ->condition('status', 1)
+                ->fields('n', array('nid', 'status'))
                 ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
                 ->execute();
                 
@@ -435,7 +434,7 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
                     $values[] = array(
                         'rn_nid' => $val->nid,
                         'rn_sid' => (int)$sid,
-                        'rn_status' => 1,
+                        'rn_status' => (int)$val->status,
                     );
                 }
                 unset($val);
@@ -493,13 +492,11 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
     $emails = preg_split("/[\s,]+/", $form_state['values']['emails']);
     
     $nids = db_select('node', 'n')
-    ->fields('n', array('nid'))
-    ->condition('status', 1)
+    ->fields('n', array('nid', 'status'))
     ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
     ->execute()->fetchAllAssoc('nid');
     for($i=0; $i<sizeof($emails); $i++){
         $email = trim($emails[$i]);
-        $nodes = $nids;
         if($email == ''){
           continue;
         }
@@ -527,11 +524,11 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
                 if($newid){
                     $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status'));
                     $values = array();
-                    foreach($nodes as $val){
+                    foreach($nids as $val){
                         $values[] = array(
                             'rn_nid' => $val->nid,
                             'rn_sid' => (int)$newid,
-                            'rn_status' => 1,
+                            'rn_status' => (int)$val->status,
                         );
                     }
                     unset($val);
