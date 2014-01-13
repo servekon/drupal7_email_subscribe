@@ -277,7 +277,7 @@ function email_subscribe_resubscribe_token($token=''){
                 foreach($nids as $val){
                     $values[] = array(
                         'rn_nid' => $val->nid,
-                        'rn_sid' => (int)$sid,
+                        'rn_sid' => (int)$sid->sid,
                         'rn_status' => 1,
                     );
                 }
