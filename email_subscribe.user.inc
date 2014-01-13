@@ -5,7 +5,7 @@
  * */
 function email_subscribe_subscribe_form($form=array(), &$form_state){
 	global $user;
-    $email = !empty($form_state['values']['email']) ? $form_state['values']['email'] : $user->mail;
+    $email = !empty($form_state['values']['email']) ? $form_state['values']['email'] : isset($user->mail) ? $user->mail : '';
     
     $form['email']= array(
 		'#type' => 'textfield',
