@@ -19,7 +19,7 @@ function email_subscribe_subscribe_form($form=array(), &$form_state){
         '#value' => t('Perform subscription'),
         '#weight' => 10,
     );
-    $form['#action'] = 'email-subscribe';
+    $form['#action'] = '/email-subscribe';
     
     return $form;
 }
