@@ -311,8 +311,8 @@ msgid "New log entry in the module subscription on the site @site-name"
 msgstr "Новая запись в логе модуля подписки на сайте @site-name"
 
 #: email_subscribe.module:390
-msgid "Your message has been sent."
-msgstr "Ваше сообщение отправлено."
+msgid "In your e-mail address sent an email with further instructions."
+msgstr "На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями."
 
 #: email_subscribe.module:393
 msgid "Subscribe email successful."
