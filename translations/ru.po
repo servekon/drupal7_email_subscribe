@@ -319,8 +319,8 @@ msgid "Subscribe email successful."
 msgstr "Ваш email успешно подписан."
 
 #: email_subscribe.module:398
-msgid "@email has been @type."
-msgstr "@email был @type."
+msgid "To email '@email' action was performed '@type'."
+msgstr "Для email '@email' было выполнено действие '@type'."
 
 #: email_subscribe.module:401
 msgid "Notification to the site administrator has been sent."
