@@ -67,15 +67,14 @@ function email_subscribe_subscribe_form_submit($form, &$form_state){
             ))->execute();
             if($new){
                 $nids = db_select('node', 'n')
-                ->fields('n', array('nid'))
-                ->condition('status', 1)
+                ->fields('n', array('nid', 'status'))
                 ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
                 ->execute();
                 foreach($nids as $val){
                     $values[] = array(
                         'rn_nid' => $val->nid,
                         'rn_sid' => (int)$new,
-                        'rn_status' => 1,
+                        'rn_status' => (int)$val->status,
                     );
                 }
                 unset($val);
@@ -269,8 +268,7 @@ function email_subscribe_resubscribe_token($token=''){
                 ->fetchObject();
                 
                 $nids = db_select('node', 'n')
-                ->fields('n', array('nid'))
-                ->condition('status', 1)
+                ->fields('n', array('nid', 'status'))
                 ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
                 ->execute();
                 
@@ -278,7 +276,7 @@ function email_subscribe_resubscribe_token($token=''){
                     $values[] = array(
                         'rn_nid' => $val->nid,
                         'rn_sid' => (int)$sid->sid,
-                        'rn_status' => 1,
+                        'rn_status' => (int)$val->status,
                     );
                 }
                 unset($val);
