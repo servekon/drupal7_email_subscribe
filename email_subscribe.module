@@ -285,25 +285,28 @@ function _email_subscribe_send_by_cron($item){
  */
 function email_subscribe_node_insert($node) {
     try{
-        $values = array();
-        $users = db_select('email_subscribe_users', 'u')
-        ->fields('u', array('sid'))
-        ->condition('status', array(1,2), 'IN')
-        ->execute();
-        foreach($users as $val){
-            $values[] = array(
-                'rn_nid' => $node->nid,
-                'rn_sid' => (int)$val->sid,
-            );
-        }
-        unset($val);
-        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid'));
-        foreach ($values as $record) {
-            $query->values($record);
-        }
-        $res = $query->execute();
-        if($res){
-            drupal_set_message(t('Material added to the distribution list.'));
+        $node_types = variable_get('email_subscribe_allowed_node_types', array('page'));
+        if(in_array((string)$node->type, array_values($node_types), true)){
+            $values = array();
+            $users = db_select('email_subscribe_users', 'u')
+            ->fields('u', array('sid'))
+            ->condition('status', array(1,2), 'IN')
+            ->execute();
+            foreach($users as $val){
+                $values[] = array(
+                    'rn_nid' => $node->nid,
+                    'rn_sid' => (int)$val->sid,
+                );
+            }
+            unset($val);
+            $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid'));
+            foreach ($values as $record) {
+                $query->values($record);
+            }
+            $res = $query->execute();
+            if($res){
+                drupal_set_message(t('Material added to the distribution list.'));
+            }
         }
     }
     catch(Exception $e){
