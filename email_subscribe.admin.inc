@@ -229,6 +229,11 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
         '#value' => $arg,
         '#title' => t('Search'),
         '#weight' => 2,
+        '#states' => array(
+            'enabled' => array(
+                ':input[name="filter_type"]' => array('value' => 5),
+            ),
+        ),
     );
     $form['filter_email']['actions'] = array(
         '#type' => 'actions',
@@ -306,6 +311,10 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
             case 3:
                 $val->actions	= l(t('Re-subscribe'), 'admin/config/services/email_subscribe/re-subscribe/'.$val->sid, $attrLinks);    
             break;
+        }
+        
+        if(!empty($val->actions)){
+            $val->actions .= '<br />'.l(t('Remove'), 'admin/config/services/email_subscribe/remove/'.$val->sid, $attrLinks); 
         }
         
         if($val->uid === $user->uid){
@@ -457,6 +466,68 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
         }
     }
     return '';
+}
+
+function _email_subscribe_remove_by_admin($sid=0){
+    $form = drupal_get_form('_email_subscribe_remove_by_admin_form', (int)$sid);
+    return drupal_render($form);
+}
+
+function _email_subscribe_remove_by_admin_form($form, &$form_state, $sid){
+    $form = array();
+    
+    $email = db_select('email_subscribe_users', 'u')
+    ->fields('u', array('email'))
+    ->condition('sid', (int)$sid)
+    ->range(0,1)
+    ->execute()->fetchObject();
+    
+    if(empty($email->email)){
+        drupal_set_message(t('No data.'), 'warning');
+        drupal_goto('admin/config/services/email_subscribe');
+    }
+    $form['email_subscribe_item'] = array(
+		'#type' => 'item',
+		'#title' => t('Are you sure you want to remove user with email %email?', array('%email'=>$email->email)),
+		'#weight' => -1,
+	);
+	
+    $form['email'] = array(
+        '#type' => 'hidden',
+        '#value' => $email->email,
+    );
+    
+    $form['email_id'] = array(
+        '#type' => 'hidden',
+        '#value' => $sid,
+    );
+    
+	$form['submit'] = array(
+			'#type' => 'submit',
+			'#value' => t('Yes'),
+			'#weight' => 1,
+	);
+	
+	$form['alcom_konsalt_cancel'] = array(
+		'#type' => 'link',
+		'#title' => t('Cancel'),
+		'#href' => 'admin/config/services/email_subscribe',
+		'#weight' => 2,
+	);
+    return $form;
+}
+
+function _email_subscribe_remove_by_admin_form_submit($form, &$form_state){
+    $sid = (int)$form_state['values']['email_id'];
+    $email = check_plain($form_state['values']['email']);
+    $del = db_delete('email_subscribe_users')->condition('sid', $sid)->execute();
+    if($del){
+        drupal_set_message(t('Email %email was removed.', array('%email'=>$email)));
+    }
+    else{
+        drupal_set_message(t('Email %email was not removed.', array('%email'=>$email)), 'error');
+    }
+    $form_state['redirect'] = 'admin/config/services/email_subscribe';
 }
 
 /**
