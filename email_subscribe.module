@@ -92,6 +92,15 @@ function email_subscribe_menu() {
         'file' => 'email_subscribe.admin.inc',
 	);
     
+    $menu['admin/config/services/email_subscribe/remove/%'] = array(
+		'title' => 'Remove email address',
+		'page callback' => '_email_subscribe_remove_by_admin',
+		'page arguments' => array(5),
+		'access arguments' => array('administer email_subscribe'),
+        'type'=>MENU_CALLBACK,
+        'file' => 'email_subscribe.admin.inc',
+	);
+    
     //~ User menu
 	
 	$menu['email-subscribe'] = array(
@@ -233,7 +242,7 @@ function email_subscribe_cron() {
     ->fields('rn', array('rn_id', 'rn_nid'))
     ->condition('u.status', 2)
     ->condition('rn.rn_status', 0)
-    ->condition('n.status', 1)
+    ->condition('n.status', NODE_PUBLISHED)
     ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
     ->range(0, (int)$limit);
     $res = $rnodes->execute();
@@ -306,11 +315,12 @@ function email_subscribe_node_insert($node) {
             $res = $query->execute();
             if($res){
                 drupal_set_message(t('Material added to the distribution list.'));
+                watchdog('email-subscribe-info', 'Node with ID '.$node->nid.' added to the distribution list');
             }
         }
     }
     catch(Exception $e){
-		watchdog_exception('error', $e);
+		watchdog_exception('email-subscribe-error', $e);
 		drupal_set_message(t('Error'), 'error');
 	}
 }
