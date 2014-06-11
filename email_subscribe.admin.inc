@@ -248,7 +248,10 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
             '#value' => t('Cancel'),
     );
 	$headArr = array(
+<<<<<<< HEAD
 		array('data' => '#'),
+=======
+>>>>>>> ccff4290f13fbb1ce6da3ffe9d93e5ffa97d1820
 		array('data' => t('Email'), 'field' => 'email'),
 		array('data' => t('Status'), 'field' => 'status'),
 		array('data' => t('Date subscribe'), 'field' => 'date_subscribe','sort' => 'desc'),
@@ -266,6 +269,7 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
 	$rows = array();
 	
 	try{
+<<<<<<< HEAD
 		$query 	= db_select('email_subscribe_users', 'u')
 		->extend('TableSort')
 		->orderByHeader($header);
@@ -275,6 +279,13 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
             $query = $query->extend('PagerDefault')->limit(25);
         }
         
+=======
+		$query 	= db_select('email_subscribe_users', 'u')->extend('PagerDefault')	//Pager Extender
+		->limit(25)
+		->extend('TableSort')
+		->orderByHeader($header);
+		
+>>>>>>> ccff4290f13fbb1ce6da3ffe9d93e5ffa97d1820
 		$query->fields('u', array('sid', 'email', 'status', 'subs_token', 'unsubs_token', 'date_subscribe', 'date_unsubscribe', 'date_resubscribe', 'uid'));
 		
         if(!empty($argType)){
@@ -338,12 +349,20 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
 		unset($val->subs_token);
 		unset($val->unsubs_token);
         $row	= (array)($val);
+<<<<<<< HEAD
 		array_unshift($row, $key+1);
         $rows[] = $row;
 	}
 	unset($key,$val);
 	
     $form['subscribed_users'] = array(
+=======
+		$rows[] = $row;
+	}
+	unset($key,$val);
+	
+	$form['subscribed_users'] = array(
+>>>>>>> ccff4290f13fbb1ce6da3ffe9d93e5ffa97d1820
 		'#theme' => 'table',
 		'#header' => $header,
 		'#rows' => $rows,
