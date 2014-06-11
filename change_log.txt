@@ -1,2 +1,6 @@
+Version 1.0.2:
+-Added the column with ordinal number on the admin page with list of users;
+-Now pager off when using the filter on the admin page with the list of users;
+
 Version 1.0.1:
 -Added ability to delete email in the backend;
