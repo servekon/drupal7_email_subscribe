@@ -428,7 +428,7 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
                     drupal_set_message(t('Subscribe email successful.'), 'status', FALSE);
                 }
                 //~ Send notification to the site admin
-                if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0){
+                if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0 and $type > 0){
                     $admEmail = variable_get('site_mail');
                     $params['message'] = t("To email '@email' action was performed '@type'.", array('@email'=>$to, '@type'=>t($arrAdm[$type])));
                     $toAdmin = drupal_mail('email_subscribe', 'admin_notice', $admEmail, $language, $params, $from, $send);

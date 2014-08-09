@@ -248,6 +248,7 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
             '#value' => t('Cancel'),
     );
 	$headArr = array(
+		array('data' => '#'),
 		array('data' => t('Email'), 'field' => 'email'),
 		array('data' => t('Status'), 'field' => 'status'),
 		array('data' => t('Date subscribe'), 'field' => 'date_subscribe','sort' => 'desc'),
@@ -265,11 +266,15 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
 	$rows = array();
 	
 	try{
-		$query 	= db_select('email_subscribe_users', 'u')->extend('PagerDefault')	//Pager Extender
-		->limit(25)
+		$query 	= db_select('email_subscribe_users', 'u')
 		->extend('TableSort')
 		->orderByHeader($header);
 		
+        //~ Set the pager only if the filter is off
+        if($collapsed){
+            $query = $query->extend('PagerDefault')->limit(25);
+        }
+        
 		$query->fields('u', array('sid', 'email', 'status', 'subs_token', 'unsubs_token', 'date_subscribe', 'date_unsubscribe', 'date_resubscribe', 'uid'));
 		
         if(!empty($argType)){
@@ -333,11 +338,12 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
 		unset($val->subs_token);
 		unset($val->unsubs_token);
         $row	= (array)($val);
-		$rows[] = $row;
+		array_unshift($row, $key+1);
+        $rows[] = $row;
 	}
 	unset($key,$val);
 	
-	$form['subscribed_users'] = array(
+    $form['subscribed_users'] = array(
 		'#theme' => 'table',
 		'#header' => $header,
 		'#rows' => $rows,
