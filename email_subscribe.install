@@ -3,7 +3,7 @@
  * Implementation of hook_install()
  */
 function email_subscribe_install() {
-	
+  
 }
 
 /**
@@ -17,7 +17,7 @@ function email_subscribe_uninstall(){
  * Implementation of hook_enable()
  */
 function email_subscribe_enable(){
-    drupal_set_message(t('You need to set email templates for email subscribe module.').l(t('Configuration'), 'admin/config/services/email_subscribe/settings').'.');
+  drupal_set_message(t('You need to set email templates for email subscribe module.').l(t('Configuration'), 'admin/config/services/email_subscribe/settings').'.');
 }
 
 /**
@@ -25,123 +25,122 @@ function email_subscribe_enable(){
  * @return array of Schema API table definitions.
  */
 function email_subscribe_schema() {
-	$schema['email_subscribe_users'] = array(
-		'fields' => array(
-			'sid' => array(
-                'type' => 'serial',
-                'size' => 'big',
-                'not null' => TRUE, 
-				'description'=> "Field ID"
-            ),
-			'email' => array(
-                'type' => 'varchar',
-                'size' => 'normal',
-                'not null' => FALSE,
-                'length' => 99, 
-                'description'=> "User email"
-            ),
-			'status' =>  array(
-                'type' => 'int',
-                'size' => 'small',
-                'default' => 0,
-                'not null' => TRUE, 
-				'description'=> "0-Not signed, 1-Subscribe, but email not confirm, 2-Subscribe, 3-Unsubscribe"
-            ),
-			'uid' =>  array(
-                'type' => 'int',
-                'size' => 'normal',
-                'unsigned' => TRUE,
-                'default' => 0,
-                'not null' => TRUE,
-                'length' => 10, 
-                'description'=> "User ID performed an action"
-            ),
-			'subs_token' => array(
-                'type' => 'varchar',
-                'size' => 'normal',
-                'not null' => FALSE,
-                'length' => 32,
-				'description'=> "Token for confirm email(md5)"
-            ),
-			'unsubs_token' => array(
-                'type' => 'varchar',
-                'size' => 'normal',
-                'not null' => FALSE,
-                'length' => 32,
-				'description'=> "Token to confirm unsubscribe(md5)"
-            ),
-            'date_subscribe' => array(
-                'mysql_type' => 'datetime',
-                'not null' => FALSE,
-                'description'=> "Date of when user confirm subscribe"
-            ),
-            'date_unsubscribe' => array(
-                'mysql_type' => 'datetime',
-                'not null' => FALSE,
-                'description'=> "Date of when user confirm unsubscribe"
-            ),
-            'date_resubscribe' => array(
-                'mysql_type' => 'datetime',
-                'not null' => FALSE,
-                'description'=> "Date of when user confirm re-subscribe"
-            ),
-			'datechange' => array(
-                'type' => 'datetime',
-                'mysql_type' => 'timestamp',
-                'not null' => TRUE,
-                'description'=> "Date of change"
-            ),
-		),
-		'indexes' => array(
-            'email'=>array('email'),
-            'status'=>array('status')
-        ),
-		'primary key' => array('sid')
-	);
+  $schema['email_subscribe_users'] = array(
+    'fields' => array(
+      'sid' => array(
+        'type' => 'serial',
+        'size' => 'big',
+        'not null' => TRUE, 
+        'description'=> "Field ID"
+      ),
+      'email' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'not null' => FALSE,
+        'length' => 99, 
+        'description'=> "User email"
+      ),
+      'status' =>  array(
+        'type' => 'int',
+        'size' => 'small',
+        'default' => 0,
+        'not null' => TRUE, 
+        'description'=> "0-Not signed, 1-Subscribe, but email not confirm, 2-Subscribe, 3-Unsubscribe"
+      ),
+      'uid' =>  array(
+        'type' => 'int',
+        'size' => 'normal',
+        'unsigned' => TRUE,
+        'default' => 0,
+        'not null' => TRUE,
+        'length' => 10, 
+        'description'=> "User ID performed an action"
+      ),
+      'subs_token' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'not null' => FALSE,
+        'length' => 32,
+        'description'=> "Token for confirm email(md5)"
+      ),
+      'unsubs_token' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'not null' => FALSE,
+        'length' => 32,
+        'description'=> "Token to confirm unsubscribe(md5)"
+      ),
+      'date_subscribe' => array(
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+        'description'=> "Date of when user confirm subscribe"
+      ),
+      'date_unsubscribe' => array(
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+        'description'=> "Date of when user confirm unsubscribe"
+      ),
+      'date_resubscribe' => array(
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+        'description'=> "Date of when user confirm re-subscribe"
+      ),
+      'datechange' => array(
+        'type' => 'datetime',
+        'mysql_type' => 'timestamp',
+        'not null' => TRUE,
+        'description'=> "Date of change"
+      ),
+    ),
+    'indexes' => array(
+      'email'=>array('email'),
+      'status'=>array('status')
+    ),
+    'primary key' => array('sid')
+  );
     
-    $schema['email_subscribe_readed_nodes'] = array(
-		'fields' => array(
-			'rn_id' => array(
-                'type' => 'serial',
-                'size' => 'big',
-                'not null' => TRUE, 
-				'description'=> "Field ID"
-            ),
-            'rn_nid' => array(
-                'type' => 'int',
-                'unsigned' => TRUE,
-                'not null' => FALSE,
-                'default' => NULL,
-                'description'=> "Node ID"
-            ),
-			'rn_sid' =>  array(
-                'type' => 'int',
-                'unsigned' => TRUE,
-                'not null' => FALSE,
-                'default' => NULL, 
-                'description'=> "Subscribe user id"
-            ),
-            'rn_status' =>  array(
-                'type' => 'int',
-                'size' => 'small',
-                'default' => 0,
-                'not null' => TRUE, 
-				'description'=> "0-email don't send, 1-email has been sented."
-            ),
-			'datechange' => array(
-                'type' => 'datetime',
-                'mysql_type' => 'timestamp',
-                'not null' => TRUE,
-                'description'=> "Date of change"
-            ),
-		),
-		'indexes' => array(
-            'rn_nid'=>array('rn_nid'),
-            'rn_sid'=>array('rn_sid'),
-            'rn_status'=>array('rn_status'),
-        ),
-        'primary key' => array('rn_id')
-	);
-    
-	return $schema;
+  $schema['email_subscribe_readed_nodes'] = array(
+    'fields' => array(
+      'rn_id' => array(
+        'type' => 'serial',
+        'size' => 'big',
+        'not null' => TRUE, 
+        'description'=> "Field ID"
+      ),
+      'rn_nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => NULL,
+        'description'=> "Node ID"
+      ),
+      'rn_sid' =>  array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => NULL, 
+        'description'=> "Subscribe user id"
+      ),
+      'rn_status' =>  array(
+        'type' => 'int',
+        'size' => 'small',
+        'default' => 0,
+        'not null' => TRUE, 
+        'description'=> "0-email don't send, 1-email has been sented."
+      ),
+      'datechange' => array(
+        'type' => 'datetime',
+        'mysql_type' => 'timestamp',
+        'not null' => TRUE,
+        'description'=> "Date of change"
+      ),
+    ),
+    'indexes' => array(
+      'rn_nid'=>array('rn_nid'),
+      'rn_sid'=>array('rn_sid'),
+      'rn_status'=>array('rn_status'),
+    ),
+    'primary key' => array('rn_id')
+  );
+  return $schema;
 }

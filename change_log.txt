@@ -1,3 +1,7 @@
+Version 1.0.3.1:
+-Added support for the quotes on the mail headers;
+-Tabs are replaced with spaces;
+
 Version 1.0.3:
 -Fix notifications for administrator. Don't send email if processing email of notice of the new content;
 

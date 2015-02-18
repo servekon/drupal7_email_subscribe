@@ -7,198 +7,197 @@ function email_subscribe_permission(){
     'access email_subscribe' => array(
       'title' => t('Allow subscribe/unsubscribe'),
     ),
-	'administer email_subscribe' => array(
+    'administer email_subscribe' => array(
       'title' => t('Administer Email Subscribe module'),
       'restrict access' => TRUE,
     ),
   );
 }
 
-
 /**
  * Implementation of hook_menu
  * */
 function email_subscribe_menu() {
-	/*
-	 * Administration interface
-	 * */
-	$menu['admin/config/services/email_subscribe'] = array(
-		'title' => 'Email Subscribe',
-        'description' => t('View the subscribed users and settings for the module'),
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_list_users_form'),
-		'access arguments' => array('administer email_subscribe'),
-        'file' => 'email_subscribe.admin.inc',
-	);
-	
-    $menu['admin/config/services/email_subscribe/list-users'] = array(
-		'title' => 'List of subscribed users', 
-		'type' => MENU_DEFAULT_LOCAL_TASK, 
-		'weight' => -1,
-	);
-    
-    $menu['admin/config/services/email_subscribe/mass-subscribe'] = array(
-		'title' => 'Mass Subscribe',
-        'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_mass_subscribe_form'),
-		'access arguments' => array('administer email_subscribe'),
-        'file' => 'email_subscribe.admin.inc',
-        'type' => MENU_LOCAL_ACTION, 
-	);
-    
-    $menu['admin/people/email_subscribe'] = array(
-		'title' => 'Mass Subscribe by email',
-        'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_mass_subscribe_form'),
-		'access arguments' => array('administer email_subscribe'),
-        'file' => 'email_subscribe.admin.inc',
-        'type' => MENU_LOCAL_TASK, 
-	);
-    
-    $menu['admin/config/services/email_subscribe/settings'] = array(
-		'title' => 'Email Subscribe settings',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_settings_form'),
-		'access arguments' => array('administer email_subscribe'),
-        'weight' => 10,
-        'type' => MENU_LOCAL_TASK, 
-        'file' => 'email_subscribe.admin.inc',
-	);
-    
-    $menu['admin/config/services/email_subscribe/confirm/%'] = array(
-		'title' => 'Confirm email address',
-		'page callback' => '_email_subscribe_confirmemail_by_admin',
-		'page arguments' => array(5),
-		'access arguments' => array('administer email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.admin.inc',
-	);
+  /*
+   * Administration interface
+   * */
+  $menu['admin/config/services/email_subscribe'] = array(
+    'title' => 'Email Subscribe',
+    'description' => t('View the subscribed users and settings for the module'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_list_users_form'),
+    'access arguments' => array('administer email_subscribe'),
+    'file' => 'email_subscribe.admin.inc',
+  );
+  
+  $menu['admin/config/services/email_subscribe/list-users'] = array(
+    'title' => 'List of subscribed users', 
+    'type' => MENU_DEFAULT_LOCAL_TASK, 
+    'weight' => -1,
+  );
+  
+  $menu['admin/config/services/email_subscribe/mass-subscribe'] = array(
+    'title' => 'Mass Subscribe',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_mass_subscribe_form'),
+    'access arguments' => array('administer email_subscribe'),
+    'file' => 'email_subscribe.admin.inc',
+    'type' => MENU_LOCAL_ACTION, 
+  );
+  
+  $menu['admin/people/email_subscribe'] = array(
+    'title' => 'Mass Subscribe by email',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_mass_subscribe_form'),
+    'access arguments' => array('administer email_subscribe'),
+    'file' => 'email_subscribe.admin.inc',
+    'type' => MENU_LOCAL_TASK, 
+  );
+  
+  $menu['admin/config/services/email_subscribe/settings'] = array(
+    'title' => 'Email Subscribe settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_settings_form'),
+    'access arguments' => array('administer email_subscribe'),
+    'weight' => 10,
+    'type' => MENU_LOCAL_TASK, 
+    'file' => 'email_subscribe.admin.inc',
+  );
+  
+  $menu['admin/config/services/email_subscribe/confirm/%'] = array(
+    'title' => 'Confirm email address',
+    'page callback' => '_email_subscribe_confirmemail_by_admin',
+    'page arguments' => array(5),
+    'access arguments' => array('administer email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.admin.inc',
+  );
 
-    $menu['admin/config/services/email_subscribe/unsubscribe/%'] = array(
-		'title' => 'Unsubscribe email address',
-		'page callback' => '_email_subscribe_unsubscribe_by_admin',
-		'page arguments' => array(5),
-		'access arguments' => array('administer email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.admin.inc',
-	);
-    
-    $menu['admin/config/services/email_subscribe/re-subscribe/%'] = array(
-		'title' => 'Re-subscribe email address',
-		'page callback' => '_email_subscribe_resubscribe_by_admin',
-		'page arguments' => array(5),
-		'access arguments' => array('administer email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.admin.inc',
-	);
-    
-    $menu['admin/config/services/email_subscribe/remove/%'] = array(
-		'title' => 'Remove email address',
-		'page callback' => '_email_subscribe_remove_by_admin',
-		'page arguments' => array(5),
-		'access arguments' => array('administer email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.admin.inc',
-	);
-    
-    //~ User menu
-	
-	$menu['email-subscribe'] = array(
-		'title' => 'Subscribe',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_subscribe_form'),
-		'access arguments' => array('access email_subscribe'),
-        'file' => 'email_subscribe.user.inc',
-	);
-	
-    $menu['email-subscribe-confirm-email'] = array(
-		'title' => 'Confirm email address',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_confirmemail_form'),
-		'access arguments' => array('access email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.user.inc',
-	);
-    
-    //~ User/Token
-    $menu['email-subscribe-confirm-email/token/%'] = array(
-		'title' => 'Confirm email address',
-		'page callback' => 'email_subscribe_confirmemail_token',
-		'page arguments' => array(2),
-		'access arguments' => array('access email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.user.inc',
-	);
-    
-    $menu['email-unsubscribe'] = array(
-		'title' => 'Unsubscribe',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_unsubscribe_form'),
-		'access arguments' => array('access email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.user.inc',
-	);
-	
-    //~ User/Token
-    $menu['email-unsubscribe/token/%'] = array(
-		'title' => 'Confirm unsubscribe email address',
-		'page callback' => 'email_subscribe_unsubscribe_token',
-		'page arguments' => array(2),
-		'access arguments' => array('access email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.user.inc',
-	);
-    
-    $menu['email-resubscribe'] = array(
-		'title' => 'Re-subscribe email address',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('email_subscribe_resubscribe_form'),
-		'access arguments' => array('access email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.user.inc',
-	);
-    
-    //~ Token
-    $menu['email-resubscribe/token/%'] = array(
-		'title' => 'Confirm re-subscribe email address',
-		'page callback' => 'email_subscribe_resubscribe_token',
-		'page arguments' => array(2),
-		'access arguments' => array('access email_subscribe'),
-        'type'=>MENU_CALLBACK,
-        'file' => 'email_subscribe.user.inc',
-	);
+  $menu['admin/config/services/email_subscribe/unsubscribe/%'] = array(
+    'title' => 'Unsubscribe email address',
+    'page callback' => '_email_subscribe_unsubscribe_by_admin',
+    'page arguments' => array(5),
+    'access arguments' => array('administer email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.admin.inc',
+  );
+  
+  $menu['admin/config/services/email_subscribe/re-subscribe/%'] = array(
+    'title' => 'Re-subscribe email address',
+    'page callback' => '_email_subscribe_resubscribe_by_admin',
+    'page arguments' => array(5),
+    'access arguments' => array('administer email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.admin.inc',
+  );
+  
+  $menu['admin/config/services/email_subscribe/remove/%'] = array(
+    'title' => 'Remove email address',
+    'page callback' => '_email_subscribe_remove_by_admin',
+    'page arguments' => array(5),
+    'access arguments' => array('administer email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.admin.inc',
+  );
+  
+  //~ User menu
+  
+  $menu['email-subscribe'] = array(
+    'title' => 'Subscribe',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_subscribe_form'),
+    'access arguments' => array('access email_subscribe'),
+    'file' => 'email_subscribe.user.inc',
+  );
+  
+  $menu['email-subscribe-confirm-email'] = array(
+    'title' => 'Confirm email address',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_confirmemail_form'),
+    'access arguments' => array('access email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.user.inc',
+  );
+  
+  //~ User/Token
+  $menu['email-subscribe-confirm-email/token/%'] = array(
+    'title' => 'Confirm email address',
+    'page callback' => 'email_subscribe_confirmemail_token',
+    'page arguments' => array(2),
+    'access arguments' => array('access email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.user.inc',
+  );
+  
+  $menu['email-unsubscribe'] = array(
+    'title' => 'Unsubscribe',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_unsubscribe_form'),
+    'access arguments' => array('access email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.user.inc',
+  );
+  
+  //~ User/Token
+  $menu['email-unsubscribe/token/%'] = array(
+    'title' => 'Confirm unsubscribe email address',
+    'page callback' => 'email_subscribe_unsubscribe_token',
+    'page arguments' => array(2),
+    'access arguments' => array('access email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.user.inc',
+  );
+  
+  $menu['email-resubscribe'] = array(
+    'title' => 'Re-subscribe email address',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('email_subscribe_resubscribe_form'),
+    'access arguments' => array('access email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.user.inc',
+  );
+  
+  //~ Token
+  $menu['email-resubscribe/token/%'] = array(
+    'title' => 'Confirm re-subscribe email address',
+    'page callback' => 'email_subscribe_resubscribe_token',
+    'page arguments' => array(2),
+    'access arguments' => array('access email_subscribe'),
+    'type'=>MENU_CALLBACK,
+    'file' => 'email_subscribe.user.inc',
+  );
    
-	return $menu;
+  return $menu;
 }
 
 /**
  * Implements hook_block_info().
  */
 function email_subscribe_block_info(){
-	$blocks['email_subs_subscribe_block'] = array(
-		'info' => t('Subscribe by email'),
-		'status' => FALSE,
-		'visibility' => BLOCK_VISIBILITY_NOTLISTED,
-		'pages' => 'email-subscribe',
-	);
-	return $blocks;
+  $blocks['email_subs_subscribe_block'] = array(
+    'info' => t('Subscribe by email'),
+    'status' => FALSE,
+    'visibility' => BLOCK_VISIBILITY_NOTLISTED,
+    'pages' => 'email-subscribe',
+  );
+  return $blocks;
 }
 
 /**
  * Implements hook_block_configure().
  */
 function email_subscribe_block_configure($delta=''){
-	$form = array();
-	if($delta == 'email_subs_subscribe_block'){
-		$default_values = variable_get('email_subscribe_allowed_node_types', array('page'));
-        $form['email_subscribe_allowed_node_types'] = array(
-			'#type' => 'checkboxes',
-			'#title' => t('Node types are available for subscription'),
-			'#options' => node_type_get_names(),
-			'#default_value' => $default_values,
-		);
-	}
-	return $form;
+  $form = array();
+  if($delta == 'email_subs_subscribe_block'){
+    $default_values = variable_get('email_subscribe_allowed_node_types', array('page'));
+    $form['email_subscribe_allowed_node_types'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Node types are available for subscription'),
+      '#options' => node_type_get_names(),
+      '#default_value' => $default_values,
+    );
+  }
+  return $form;
 }
 
 /**
@@ -206,11 +205,11 @@ function email_subscribe_block_configure($delta=''){
  */
 function email_subscribe_block_save($delta = '', $edit = array()) {
   if ($delta == 'email_subs_subscribe_block') {
-    $value = $edit['email_subscribe_allowed_node_types'];
-    if (is_array($value)) {
-      $value = array_keys(array_filter($value));
-    }
-    variable_set('email_subscribe_allowed_node_types', $value);
+  $value = $edit['email_subscribe_allowed_node_types'];
+  if (is_array($value)) {
+    $value = array_keys(array_filter($value));
+  }
+  variable_set('email_subscribe_allowed_node_types', $value);
   }
   return;
 }
@@ -219,12 +218,12 @@ function email_subscribe_block_save($delta = '', $edit = array()) {
  * Implements hook_block_view().
  */
 function email_subscribe_block_view($delta = '') {
-	module_load_include('inc', 'email_subscribe', 'email_subscribe.user');
-    if($delta == 'email_subs_subscribe_block'){
-		$block['subject'] = t('Subscribe to new posts');
-		$block['content'] = drupal_get_form('email_subscribe_subscribe_form');
-	}
-	return $block;
+  module_load_include('inc', 'email_subscribe', 'email_subscribe.user');
+  if($delta == 'email_subs_subscribe_block'){
+    $block['subject'] = t('Subscribe to new posts');
+    $block['content'] = drupal_get_form('email_subscribe_subscribe_form');
+  }
+  return $block;
 }
 
 /**
@@ -232,7 +231,7 @@ function email_subscribe_block_view($delta = '') {
  */
 function email_subscribe_cron() {
   $interval = variable_get('email_subscribe_interval', 60*60);
-  $limit    = variable_get('email_subscribe_limit', 15);
+  $limit  = variable_get('email_subscribe_limit', 15);
   
   if (time() >= variable_get('email_subscribe_next_execution', 0)) {
     $rnodes = db_select('email_subscribe_readed_nodes', 'rn');
@@ -244,6 +243,7 @@ function email_subscribe_cron() {
     ->condition('rn.rn_status', 0)
     ->condition('n.status', NODE_PUBLISHED)
     ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
+    ->orderBy('n.nid', 'ASC')
     ->range(0, (int)$limit);
     $res = $rnodes->execute();
     
@@ -270,212 +270,207 @@ function email_subscribe_cron_queue_info() {
  * Send email and set node is readed.
  * */
 function _email_subscribe_send_by_cron($item){
-    $msg = array();
-    $node = node_load($item->rn_nid);
-    $field = field_get_items('node', $node, 'body');
-    $out = field_view_value('node', $node, 'body', $field[0]);
-    $pos = strpos($out['#markup'], '<!--break-->');
-    if(!$pos){
-        $pos = 500;
-    }
-    $out = substr($out['#markup'], 0, $pos).'...';
-    $msg['teaser'] = strip_tags($out, '<br><br/>');
-    $msg['node_url'] = url('node/'.$node->nid, array('absolute'=>TRUE));
-    $msg['title'] = $node->title;
-    
-    if(email_subcribe_send_email_letter($item->email, 0, $msg)){
-        db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1))
-        ->condition('rn_id', $item->rn_id)->execute();
-    }
+  $msg = array();
+  $node = node_load($item->rn_nid);
+  $field = field_get_items('node', $node, 'body');
+  $out = field_view_value('node', $node, 'body', $field[0]);
+  $pos = strpos($out['#markup'], '<!--break-->');
+  if(!$pos){
+    $pos = 500;
+  }
+  $out = substr($out['#markup'], 0, $pos).'...';
+  $msg['teaser'] = strip_tags($out, '<br><br/>');
+  $msg['node_url'] = url('node/'.$node->nid, array('absolute'=>TRUE));
+  $msg['title'] = $node->title;
+  
+  if(email_subcribe_send_email_letter($item->email, 0, $msg)){
+    db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1))
+    ->condition('rn_id', $item->rn_id)->execute();
+  }
 }
 
 /**
  * Implements hook_node_insert().
  */
 function email_subscribe_node_insert($node) {
-    try{
-        $node_types = variable_get('email_subscribe_allowed_node_types', array('page'));
-        if(in_array((string)$node->type, array_values($node_types), true)){
-            $values = array();
-            $users = db_select('email_subscribe_users', 'u')
-            ->fields('u', array('sid'))
-            ->condition('status', array(1,2), 'IN')
-            ->execute();
-            foreach($users as $val){
-                $values[] = array(
-                    'rn_nid' => $node->nid,
-                    'rn_sid' => (int)$val->sid,
-                );
-            }
-            unset($val);
-            $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid'));
-            foreach ($values as $record) {
-                $query->values($record);
-            }
-            $res = $query->execute();
-            if($res){
-                drupal_set_message(t('Material added to the distribution list.'));
-                watchdog('email-subscribe-info', 'Node with ID '.$node->nid.' added to the distribution list');
-            }
-        }
+  try{
+    $node_types = variable_get('email_subscribe_allowed_node_types', array('page'));
+    if(in_array((string)$node->type, array_values($node_types), true)){
+      $values = array();
+      $users = db_select('email_subscribe_users', 'u')
+      ->fields('u', array('sid'))
+      ->condition('status', array(1,2), 'IN')
+      ->execute();
+      foreach($users as $val){
+        $values[] = array(
+          'rn_nid' => $node->nid,
+          'rn_sid' => (int)$val->sid,
+        );
+      }
+      unset($val);
+      $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid'));
+      foreach ($values as $record) {
+        $query->values($record);
+      }
+      $res = $query->execute();
+      if($res){
+        drupal_set_message(t('Material added to the distribution list.'));
+        watchdog('email-subscribe-info', 'Node with ID '.$node->nid.' added to the distribution list');
+      }
     }
-    catch(Exception $e){
-		watchdog_exception('email-subscribe-error', $e);
-		drupal_set_message(t('Error'), 'error');
-	}
+  }
+  catch(Exception $e){
+    watchdog_exception('email-subscribe-error', $e);
+    drupal_set_message(t('Error'), 'error');
+  }
 }
 
 /**
  * Implement hook_mail().
  */
 function email_subscribe_mail($key, &$message, $params) {
-    global $user;
-    
-    $lang = language_default();
-    
-    if(isset($user->language)){
-        $lang = $user->language;
-    }
-    else{
-        $lang = $lang->language;
-    }
-    
-    $options = array(
-     'langcode' => $lang,
-    );
-    
-    switch ($key) {
-        case 'new_content_message':
-            $message['subject'] = t('New article on @site-name', array('@site-name' => variable_get('site_name', 'Drupal')), $options);
-            // Note that the message body is an array, not a string.
-        break;
-        case 'confirm_message':
-            $message['subject'] = t('Confirm email from @site-name to subscribe', array('@site-name' => variable_get('site_name', 'Drupal')), $options);
-            // Note that the message body is an array, not a string.
-        break;
-        case 'unsubscribe_message':
-            $message['subject'] = t('Confirm to unsubscribe on the @site-name', array('@site-name' => variable_get('site_name', 'Drupal')), $options);
-            // Note that the message body is an array, not a string.
-            
-        break;
-        case 'resubscribe_message':
-            $message['subject'] = t('Confirm to re-subscribe on the @site-name', array('@site-name' => variable_get('site_name', 'Drupal')), $options);
-            // Note that the message body is an array, not a string.
-            
-        break;
-        case 'admin_notice':
-            $message['subject'] = t('New log entry in the module subscription on the site @site-name', array('@site-name' => variable_get('site_name', 'Drupal')), $options);
-            // Note that the message body is an array, not a string.
-            
-        break;
-    }
-    $message['body'][] = check_plain($params['message']);
-    $headers = array(
-        'MIME-Version' => '1.0',
-        'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
-        'Content-Transfer-Encoding' => '8Bit',
-        'X-Mailer' => 'Drupal'
-    );
-    foreach ($headers as $key => $value) {
-        $message['headers'][$key] = $value;
-    }
+  global $user;
+  
+  $lang = language_default();
+  
+  if(isset($user->language)){
+    $lang = $user->language;
+  }
+  else{
+    $lang = $lang->language;
+  }
+  
+  $options = array(
+    'langcode' => $lang,
+  );
+  
+  $site_name = strip_tags(decode_entities(variable_get('site_name', 'Drupal')));
+  
+  switch ($key) {
+    case 'new_content_message':
+      $message['subject'] = t('New article on @site-name', array('@site-name' => $site_name), $options);
+      //~ Note that the message body is an array, not a string.
+    break;
+    case 'confirm_message':
+      $message['subject'] = t('Confirm email from @site-name to subscribe', array('@site-name' => $site_name), $options);
+    break;
+    case 'unsubscribe_message':
+      $message['subject'] = t('Confirm to unsubscribe on the @site-name', array('@site-name' => $site_name), $options);
+    break;
+    case 'resubscribe_message':
+      $message['subject'] = t('Confirm to re-subscribe on the @site-name', array('@site-name' => $site_name), $options);
+    break;
+    case 'admin_notice':
+      $message['subject'] = t('New log entry in the module subscription on the site @site-name', array('@site-name' => $site_name), $options);
+    break;
+  }
+  $message['body'][] = check_plain($params['message']);
+  $headers = array(
+    'MIME-Version' => '1.0',
+    'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+    'Content-Transfer-Encoding' => '8Bit',
+    'X-Mailer' => 'Drupal'
+  );
+  foreach ($headers as $key => $value) {
+    $message['headers'][$key] = $value;
+  }
 }
 
 /**
  * Send email
  * */
 function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
-    $arrKeys = array('new_content_message', 'confirm_message', 'unsubscribe_message', 'resubscribe_message');
-    $arrBody = array('email_subscribe_new_content_body', 'email_subscribe_confirm_body', 'email_unsubscribe_confirm_body', 'email_resubscribe_confirm_body');
-    $arrUrl = array('email-unsubscribe', 'email-subscribe-confirm-email', 'email-unsubscribe', 'email-resubscribe');
-    $arrAdm = array('Cron', 'Subscribe, not confirm', 'Unsubscribe', 'Re-subscribe');
-    
-    $from = variable_get('email_subscribe_from_email', 'admin@localhost.ru');
-    $params = array();
-    $isAdmin = user_access('administer email_subscribe');;
-    if(!empty($from)){
-        $body = variable_get($arrBody[$type], '');
-        if(is_array($body)){
-            $body=$body['value'];
-        }
-        if(!empty($to) and !empty($body)){
-            switch($type){
-                case 0: case 2:
-                    $token = email_subscribe_generate_token($to,1);
-                break;
-                case 1: case 3: default:
-                    $token = email_subscribe_generate_token($to);
-                break;
-            }
-            $url = url($arrUrl[$type].'/token/'.$token, array('absolute'=>TRUE));
-            $body = preg_replace('/\[url\]/i', $url, $body);
-            //~ New content email
-            if(empty($type)){
-                $body = preg_replace('/\[node_url\]/i', $msg['node_url'], $body);
-                $body = preg_replace('/\[title\]/i', $msg['title'], $body);
-                $body = preg_replace('/\[teaser\]/i', $msg['teaser'], $body);
-            }
-            $params['message'] = $body;
-            $language = language_default();
-            $send = TRUE;
-
-            $result = drupal_mail('email_subscribe', $arrKeys[$type], $to, $language, $params, $from, $send);
-            if ($result['result'] == TRUE) {
-                if(!empty($type)){
-                    drupal_set_message(t('In your e-mail address sent an email with further instructions.'), 'status', FALSE);
-                }
-                else{
-                    drupal_set_message(t('Subscribe email successful.'), 'status', FALSE);
-                }
-                //~ Send notification to the site admin
-                if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0 and $type > 0){
-                    $admEmail = variable_get('site_mail');
-                    $params['message'] = t("To email '@email' action was performed '@type'.", array('@email'=>$to, '@type'=>t($arrAdm[$type])));
-                    $toAdmin = drupal_mail('email_subscribe', 'admin_notice', $admEmail, $language, $params, $from, $send);
-                    if($toAdmin['result'] == TRUE and $isAdmin){
-                        drupal_set_message(t('Notification to the site administrator has been sent.'), 'status', FALSE);
-                    }
-                    elseif($toAdmin['result'] == FALSE and $isAdmin){
-                        drupal_set_message(t('Notification to the site administrator has been NOT sent.'), 'warning', FALSE);
-                    }
-                }
-            }
-            else {
-                drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error', FALSE);
-                if(empty($type)){
-                    return false;
-                }
-            }
-            if(!empty($type)){
-                drupal_goto();
-            }
-            return true;
-        }
+  $arrKeys = array('new_content_message', 'confirm_message', 'unsubscribe_message', 'resubscribe_message');
+  $arrBody = array('email_subscribe_new_content_body', 'email_subscribe_confirm_body', 'email_unsubscribe_confirm_body', 'email_resubscribe_confirm_body');
+  $arrUrl = array('email-unsubscribe', 'email-subscribe-confirm-email', 'email-unsubscribe', 'email-resubscribe');
+  $arrAdm = array('Cron', 'Subscribe, not confirm', 'Unsubscribe', 'Re-subscribe');
+  
+  $from = variable_get('email_subscribe_from_email', 'admin@localhost.ru');
+  $params = array();
+  $isAdmin = user_access('administer email_subscribe');;
+  if(!empty($from)){
+    $body = variable_get($arrBody[$type], '');
+    if(is_array($body)){
+      $body=$body['value'];
     }
-    return false;
+    if(!empty($to) and !empty($body)){
+      switch($type){
+        case 0: case 2:
+          $token = email_subscribe_generate_token($to,1);
+        break;
+        case 1: case 3: default:
+          $token = email_subscribe_generate_token($to);
+        break;
+      }
+      $url = url($arrUrl[$type].'/token/'.$token, array('absolute'=>TRUE));
+      $body = preg_replace('/\[url\]/i', $url, $body);
+      //~ New content email
+      if(empty($type)){
+        $body = preg_replace('/\[node_url\]/i', $msg['node_url'], $body);
+        $body = preg_replace('/\[title\]/i', $msg['title'], $body);
+        $body = preg_replace('/\[teaser\]/i', $msg['teaser'], $body);
+      }
+      $params['message'] = $body;
+      $language = language_default();
+      $send = TRUE;
+
+      $result = drupal_mail('email_subscribe', $arrKeys[$type], $to, $language, $params, $from, $send);
+      if ($result['result'] == TRUE) {
+        if(!empty($type)){
+          drupal_set_message(t('In your e-mail address sent an email with further instructions.'), 'status', FALSE);
+        }
+        else{
+          drupal_set_message(t('Subscribe email successful.'), 'status', FALSE);
+        }
+        //~ Send notification to the site admin
+        if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0 and $type > 0){
+          $admEmail = variable_get('site_mail');
+          $params['message'] = t("To email '@email' action was performed '@type'.", array('@email'=>$to, '@type'=>t($arrAdm[$type])));
+          $toAdmin = drupal_mail('email_subscribe', 'admin_notice', $admEmail, $language, $params, $from, $send);
+          if($toAdmin['result'] == TRUE and $isAdmin){
+            drupal_set_message(t('Notification to the site administrator has been sent.'), 'status', FALSE);
+          }
+          elseif($toAdmin['result'] == FALSE and $isAdmin){
+            drupal_set_message(t('Notification to the site administrator has been NOT sent.'), 'warning', FALSE);
+          }
+        }
+      }
+      else {
+        drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error', FALSE);
+        if(empty($type)){
+          return false;
+        }
+      }
+      if(!empty($type)){
+        drupal_goto();
+      }
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
  * Get/set subscribe/unsubscribe tokens
  * */
 function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
-    $ip     = explode('.', $_SERVER['REMOTE_ADDR']);
-	$suff   = ((int)$ip[0]+(int)end($ip))+(rand(155,775));
-	$uuid   = uniqid();
-	$token  = md5($suff.$uuid);
-    
-    if($db){
-        try{
-            $arrFields = array('subs_token','unsubs_token');
-            db_update('email_subscribe_users')
-            ->fields(array($arrFields[$type] => $token))
-            ->condition('email', check_plain($email))
-            ->execute();
-        }
-        catch(Exception $e){
-            watchdog_exception('error', $e);
-            drupal_set_message('Error'); return false;
-        }
+  $ip   = explode('.', $_SERVER['REMOTE_ADDR']);
+  $suff   = ((int)$ip[0]+(int)end($ip))+(rand(155,775));
+  $uuid   = uniqid();
+  $token  = md5($suff.$uuid);
+  
+  if($db){
+    try{
+      $arrFields = array('subs_token','unsubs_token');
+      db_update('email_subscribe_users')
+      ->fields(array($arrFields[$type] => $token))
+      ->condition('email', check_plain($email))
+      ->execute();
     }
-    return $token;
+    catch(Exception $e){
+      watchdog_exception('error', $e);
+      drupal_set_message('Error'); return false;
+    }
+  }
+  return $token;
 }
