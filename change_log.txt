@@ -1,13 +1,16 @@
-Version 1.0.3.1:
+Version 1.0.3.2
+-Fixed incorrect use watchdog() and t() functions;
+
+Version 1.0.3.1
 -Added support for the quotes on the mail headers;
 -Tabs are replaced with spaces;
 
-Version 1.0.3:
+Version 1.0.3
 -Fix notifications for administrator. Don't send email if processing email of notice of the new content;
 
-Version 1.0.2:
+Version 1.0.2
 -Added the column with ordinal number on the admin page with list of users;
 -Now pager off when using the filter on the admin page with the list of users;
 
-Version 1.0.1:
+Version 1.0.1
 -Added ability to delete email in the backend;

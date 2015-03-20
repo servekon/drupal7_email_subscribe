@@ -315,7 +315,7 @@ function email_subscribe_node_insert($node) {
       $res = $query->execute();
       if($res){
         drupal_set_message(t('Material added to the distribution list.'));
-        watchdog('email-subscribe-info', 'Node with ID '.$node->nid.' added to the distribution list');
+        watchdog('email-subscribe-info', 'Node with ID %node added to the distribution list', array('%node' => $node->nid));
       }
     }
   }
@@ -344,7 +344,7 @@ function email_subscribe_mail($key, &$message, $params) {
     'langcode' => $lang,
   );
   
-  $site_name = strip_tags(decode_entities(variable_get('site_name', 'Drupal')));
+  $site_name = variable_get('site_name', 'Drupal');
   
   switch ($key) {
     case 'new_content_message':
