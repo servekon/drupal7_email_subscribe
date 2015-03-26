@@ -232,8 +232,8 @@ function email_subscribe_block_view($delta = '') {
 function email_subscribe_cron() {
   $interval = variable_get('email_subscribe_interval', 60*60);
   $limit  = variable_get('email_subscribe_limit', 15);
-  
-  if (time() >= variable_get('email_subscribe_next_execution', 0)) {
+
+  if (REQUEST_TIME >= variable_get('email_subscribe_next_execution', 0)) {
     $rnodes = db_select('email_subscribe_readed_nodes', 'rn');
     $rnodes->innerJoin('email_subscribe_users', 'u', 'rn.rn_sid=u.sid');
     $rnodes->innerJoin('node', 'n', 'n.nid=rn.rn_nid');
@@ -251,7 +251,7 @@ function email_subscribe_cron() {
     foreach($res as $item) {
       $queue->createItem($item);
     }
-    variable_set('email_subscribe_next_execution', time() + $interval);
+    variable_set('email_subscribe_next_execution', REQUEST_TIME + $interval);
   }
 }
 
@@ -259,9 +259,10 @@ function email_subscribe_cron() {
  * Implements hook_cron_queue_info().
  */
 function email_subscribe_cron_queue_info() {
+  $timeExc  = round((int)variable_get('email_subscribe_limit', 15)/2);
   $queues['email_subscribe'] = array(
     'worker callback' => '_email_subscribe_send_by_cron', 
-    'time' => 5,
+    'time' => $timeExc,
   );
   return $queues;
 }
@@ -271,21 +272,27 @@ function email_subscribe_cron_queue_info() {
  * */
 function _email_subscribe_send_by_cron($item){
   $msg = array();
-  $node = node_load($item->rn_nid);
-  $field = field_get_items('node', $node, 'body');
-  $out = field_view_value('node', $node, 'body', $field[0]);
-  $pos = strpos($out['#markup'], '<!--break-->');
-  if(!$pos){
-    $pos = 500;
+  try{
+    $node = node_load($item->rn_nid);
+    $field = field_get_items('node', $node, 'body');
+    $out = field_view_value('node', $node, 'body', $field[0]);
+    $pos = strpos($out['#markup'], '<!--break-->');
+    if(!$pos){
+      $pos = 500;
+    }
+    $out = substr($out['#markup'], 0, $pos).'...';
+    $msg['teaser'] = strip_tags($out, '<br><br/>');
+    $msg['node_url'] = url('node/'.$node->nid, array('absolute'=>TRUE));
+    $msg['title'] = $node->title;
+    
+    if(email_subcribe_send_email_letter($item->email, 0, $msg)){
+      db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1))
+      ->condition('rn_id', $item->rn_id)->execute();
+    }
   }
-  $out = substr($out['#markup'], 0, $pos).'...';
-  $msg['teaser'] = strip_tags($out, '<br><br/>');
-  $msg['node_url'] = url('node/'.$node->nid, array('absolute'=>TRUE));
-  $msg['title'] = $node->title;
-  
-  if(email_subcribe_send_email_letter($item->email, 0, $msg)){
-    db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1))
-    ->condition('rn_id', $item->rn_id)->execute();
+  catch(Exception $e){
+    watchdog_exception('email-subscribe-error', $e);
+    drupal_set_message(t('Error'), 'error');
   }
 }
 

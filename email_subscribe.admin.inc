@@ -4,6 +4,11 @@
  * Settings form
  * */
 function email_subscribe_settings_form($form=array()){
+  $limits = array();
+  for($i=15; $i<=100; $i+=5){
+    $limits[$i] = $i;
+  }
+
   $form['email_subscribe_from_email']= array(
     '#type' => 'textfield',
     '#title' => t('Mailer'),
@@ -44,16 +49,7 @@ function email_subscribe_settings_form($form=array()){
     '#type' => 'select',
     '#title' => t('Limit for emails per one crons run'),
     '#weight' => 2,
-    '#options' => array(
-      '15' => '15',
-      '20' => '20',
-      '25' => '25',
-      '30' => '30',
-      '35' => '35',
-      '40' => '40',
-      '45' => '45',
-      '50' => '50',
-    ),
+    '#options' => $limits,
     '#required' => TRUE,
     '#default_value' => variable_get('email_subscribe_limit', 15),
   );
@@ -138,14 +134,13 @@ function email_subscribe_settings_form($form=array()){
   $value=variable_get('email_unsubscribe_confirm_body');
   
   if(is_array($value)){
-  $value=$value['value'];
+    $value=$value['value'];
   }
   
   $form['unsubscribe_settings']['item3'] = array(
     '#markup'=>t('You may include placeholders like').':[url]',
     '#weight' => 0,
   );
-  
   $form['unsubscribe_settings']['email_unsubscribe_confirm_body'] = array(
     '#type' => 'text_format',
     '#title' => t('Message body when sent to unsubscribe email'),

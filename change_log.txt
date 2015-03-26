@@ -1,3 +1,7 @@
+Version 1.0.3.3
+-Time for execute cron job was is too small. Setting the execution time=limit of emails/2;
+-Refactoring code;
+
 Version 1.0.3.2
 -Fixed incorrect use watchdog() and t() functions;
 
