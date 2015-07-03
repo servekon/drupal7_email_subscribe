@@ -88,7 +88,7 @@ function email_subscribe_schema() {
       'datechange' => array(
         'type' => 'datetime',
         'mysql_type' => 'timestamp',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'description'=> "Date of change"
       ),
     ),
@@ -131,7 +131,7 @@ function email_subscribe_schema() {
       'datechange' => array(
         'type' => 'datetime',
         'mysql_type' => 'timestamp',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'description'=> "Date of change"
       ),
     ),
