@@ -86,10 +86,10 @@ function email_subscribe_schema() {
         'description'=> "Date of when user confirm re-subscribe"
       ),
       'datechange' => array(
-        'type' => 'datetime',
-        'mysql_type' => 'timestamp',
-        'not null' => FALSE,
-        'description'=> "Date of change"
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description'=> "The Unix timestamp the date of change",
       ),
     ),
     'indexes' => array(
@@ -129,10 +129,10 @@ function email_subscribe_schema() {
         'description'=> "0-email don't send, 1-email has been sented."
       ),
       'datechange' => array(
-        'type' => 'datetime',
-        'mysql_type' => 'timestamp',
-        'not null' => FALSE,
-        'description'=> "Date of change"
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description'=> "The Unix timestamp the date of change",
       ),
     ),
     'indexes' => array(
@@ -143,4 +143,18 @@ function email_subscribe_schema() {
     'primary key' => array('rn_id')
   );
   return $schema;
+}
+
+/**
+ * Change field format 'datechange' from datetime to int.
+ */
+function email_subscribe_update_7100(){
+  $field = array(
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 0,
+    'description'=> "The Unix timestamp the date of change",
+  );
+  db_change_field('email_subscribe_users', 'datechange', 'datechange', $field);
+  db_change_field('email_subscribe_readed_nodes', 'datechange', 'datechange', $field);
 }
