@@ -17,7 +17,7 @@ function email_subscribe_uninstall(){
  * Implementation of hook_enable()
  */
 function email_subscribe_enable(){
-  drupal_set_message(t('You need to set email templates for email subscribe module.').l(t('Configuration'), 'admin/config/services/email_subscribe/settings').'.');
+  drupal_set_message(t('You need to set email templates for email subscribe module.').l(t('Configuration'), 'admin/config/services/email_subscribe/service').'.');
 }
 
 /**
@@ -148,9 +148,23 @@ function email_subscribe_schema() {
 /**
  * Change field format 'datechange' from datetime to int.
  */
-function email_subscribe_update_7100(){
+function email_subscribe_update_7101(){
   $field = array(
     'type' => 'int',
+    'size' => 'big',
+    'not null' => TRUE,
+    'default' => 0,
+    'description'=> "The Unix timestamp the date of change",
+  );
+  db_change_field('email_subscribe_users', 'datechange', 'datechange', $field);
+  db_change_field('email_subscribe_readed_nodes', 'datechange', 'datechange', $field);
+  
+  db_query("UPDATE {email_subscribe_users} SET datechange=UNIX_TIMESTAMP(`datechange`)");
+  db_query("UPDATE {email_subscribe_readed_nodes} SET datechange=UNIX_TIMESTAMP(`datechange`)");
+  
+  $field = array(
+    'type' => 'int',
+    'size' => 'normal',
     'not null' => TRUE,
     'default' => 0,
     'description'=> "The Unix timestamp the date of change",

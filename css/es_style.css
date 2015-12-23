@@ -1,0 +1,17 @@
+.email_s_header{
+  padding: 5px 5px 10px 5px;
+  background-color:#C7D9E2;
+}
+.email_s_body{
+  padding: 5px 5px 10px 5px;
+  margin: 10px 0 10px 0;
+}
+.es-preview{
+  background-color: #ffffea;
+  padding: 3px;
+  border:dashed 1px #aaaaaa;
+}
+
+.es-bold{
+  font-weight: bold;
+}

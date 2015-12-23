@@ -1,5 +1,7 @@
 name = Subscribe by email
 description = The module allows anonymous user subscribe for new content by email address.
-configure = admin/config/services/email_subscribe/settings
-version = "7.x-1.0.3.3"
+configure = admin/config/services/email_subscribe/service
+version = "7.x-1.0.4"
 core = "7.x"
+
+stylesheets[all][] = css/es_style.css

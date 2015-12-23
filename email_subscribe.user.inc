@@ -68,7 +68,7 @@ function email_subscribe_subscribe_form_submit($form, &$form_state){
       if($new){
         $nids = db_select('node', 'n')
         ->fields('n', array('nid', 'status'))
-        ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
+        ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
         ->execute();
         foreach($nids as $val){
           $values[] = array(
@@ -266,7 +266,7 @@ function email_subscribe_resubscribe_token($token=''){
         
         $nids = db_select('node', 'n')
         ->fields('n', array('nid', 'status'))
-        ->condition('type', variable_get('email_subscribe_allowed_node_types', array('page')), 'IN')
+        ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
         ->execute();
         
         foreach($nids as $val){

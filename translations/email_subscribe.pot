@@ -7,12 +7,13 @@
 #  email_subscribe.module: n/a
 #  email_subscribe.user.inc: n/a
 #  email_subscribe.info: n/a
+#  email_subscribe.install: n/a
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2014-01-12 22:15+0400\n"
+"POT-Creation-Date: 2015-12-24 00:48+0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -21,181 +22,317 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: email_subscribe.admin.inc:9
+#: email_subscribe.admin.inc:24
 msgid "Mailer"
 msgstr ""
 
-#: email_subscribe.admin.inc:16
+#: email_subscribe.admin.inc:31
 msgid "Notify the site administrator of any changes in the subscription"
 msgstr ""
 
-#: email_subscribe.admin.inc:21
-msgid "Interval"
+#: email_subscribe.admin.inc:38
+msgid "Do not store the information about sent emails"
 msgstr ""
 
-#: email_subscribe.admin.inc:45
-msgid "Limit for emails per one crons run"
+#: email_subscribe.admin.inc:39
+msgid "If checked, after send emails stored data will be removed"
 msgstr ""
 
-#: email_subscribe.admin.inc:64 email_subscribe.module:169
+#: email_subscribe.admin.inc:47 email_subscribe.module:218
 msgid "Node types are available for subscription"
 msgstr ""
 
-#: email_subscribe.admin.inc:76
-msgid "Message when a new content"
+#: email_subscribe.admin.inc:55
+msgid "Interval"
 msgstr ""
 
-#: email_subscribe.admin.inc:89;115;142;169
-msgid "You may include placeholders like"
+#: email_subscribe.admin.inc:79
+msgid "Limit for emails per one crons run"
 msgstr ""
 
-#: email_subscribe.admin.inc:89;299 email_subscribe.user.inc:141 email_subscribe.module:107
-msgid "Unsubscribe"
+#: email_subscribe.admin.inc:88
+msgid "Grouped nodes in one email?"
 msgstr ""
 
-#: email_subscribe.admin.inc:95
-msgid "Message body when sending a notification of new content"
+#: email_subscribe.admin.inc:89
+msgid "No"
+msgstr ""
+
+#: email_subscribe.admin.inc:89;613;774
+msgid "Yes"
+msgstr ""
+
+#: email_subscribe.admin.inc:90
+msgid "If you select \"Yes\" then all available the published nodes at the time of sending letter will be sent in the one letter."
 msgstr ""
 
 #: email_subscribe.admin.inc:102
+msgid "Message when a new content"
+msgstr ""
+
+#: email_subscribe.admin.inc:110;151;209;237;264
+msgid "You may include placeholders like"
+msgstr ""
+
+#: email_subscribe.admin.inc:110;133;151;182 email_subscribe.user.inc:139 email_subscribe.module:156
+msgid "Unsubscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:133
+msgid "For message header You may include placeholders like"
+msgstr ""
+
+#: email_subscribe.admin.inc:139
+msgid "Message header when sending a notification of new content"
+msgstr ""
+
+#: email_subscribe.admin.inc:163
+msgid "Message body when sending a notification of new content"
+msgstr ""
+
+#: email_subscribe.admin.inc:182
+msgid "For message footer You may include placeholders like"
+msgstr ""
+
+#: email_subscribe.admin.inc:188
+msgid "Message footer when sending a notification of new content"
+msgstr ""
+
+#: email_subscribe.admin.inc:196
 msgid "Confirm subscribe email"
 msgstr ""
 
-#: email_subscribe.admin.inc:121
+#: email_subscribe.admin.inc:215
 msgid "Message body when sent to confirm email"
 msgstr ""
 
-#: email_subscribe.admin.inc:128
+#: email_subscribe.admin.inc:223
 msgid "Confirm unsubscribe email"
 msgstr ""
 
-#: email_subscribe.admin.inc:148
+#: email_subscribe.admin.inc:242
 msgid "Message body when sent to unsubscribe email"
 msgstr ""
 
-#: email_subscribe.admin.inc:155
+#: email_subscribe.admin.inc:250
 msgid "Confirm re-subscribe email"
 msgstr ""
 
-#: email_subscribe.admin.inc:175
+#: email_subscribe.admin.inc:270
 msgid "Message body when sent to re-subscribe email"
 msgstr ""
 
-#: email_subscribe.admin.inc:189
-msgid "Email not confirmed"
+#: email_subscribe.admin.inc:277 email_subscribe.module:365
+msgid "Preview"
 msgstr ""
 
-#: email_subscribe.admin.inc:190
-msgid "Subscribed"
-msgstr ""
-
-#: email_subscribe.admin.inc:191
-msgid "Unsubscribed"
-msgstr ""
-
-#: email_subscribe.admin.inc:204;211;234;343
-msgid "Filter"
-msgstr ""
-
-#: email_subscribe.admin.inc:213;241 email_subscribe.user.inc:12;106;134;162
-msgid "Email"
-msgstr ""
-
-#: email_subscribe.admin.inc:214
-msgid "Only with email not confirmed"
-msgstr ""
-
-#: email_subscribe.admin.inc:215
-msgid "Only subscribed"
-msgstr ""
-
-#: email_subscribe.admin.inc:216
-msgid "Only unsubscribed"
-msgstr ""
-
-#: email_subscribe.admin.inc:217
-msgid "Only re-subscribed"
-msgstr ""
-
-#: email_subscribe.admin.inc:225
-msgid "Search"
-msgstr ""
-
-#: email_subscribe.admin.inc:238
-msgid "Cancel"
-msgstr ""
-
-#: email_subscribe.admin.inc:242
-msgid "Status"
-msgstr ""
-
-#: email_subscribe.admin.inc:243
-msgid "Date subscribe"
-msgstr ""
-
-#: email_subscribe.admin.inc:244
-msgid "Date unsubscribe"
-msgstr ""
-
-#: email_subscribe.admin.inc:245
-msgid "Date re-subscribe"
-msgstr ""
-
-#: email_subscribe.admin.inc:246
-msgid "User performed an action"
-msgstr ""
-
-#: email_subscribe.admin.inc:247
-msgid "Actions"
-msgstr ""
-
-#: email_subscribe.admin.inc:296
-msgid "Confirm"
-msgstr ""
-
-#: email_subscribe.admin.inc:302 email_subscribe.user.inc:169
-msgid "Re-subscribe"
+#: email_subscribe.admin.inc:296 email_subscribe.user.inc:31
+msgid "That e-mail address is not valid."
 msgstr ""
 
 #: email_subscribe.admin.inc:307
-msgid "I am"
+msgid "Email not confirmed"
 msgstr ""
 
-#: email_subscribe.admin.inc:310
-msgid "Anonymous"
+#: email_subscribe.admin.inc:308
+msgid "Subscribed"
+msgstr ""
+
+#: email_subscribe.admin.inc:309
+msgid "Unsubscribed"
+msgstr ""
+
+#: email_subscribe.admin.inc:322;329;357
+msgid "Filter"
+msgstr ""
+
+#: email_subscribe.admin.inc:331;366 email_subscribe.user.inc:12;105;132;159
+msgid "Email"
+msgstr ""
+
+#: email_subscribe.admin.inc:332
+msgid "Only with email not confirmed"
 msgstr ""
 
 #: email_subscribe.admin.inc:333
+msgid "Only subscribed"
+msgstr ""
+
+#: email_subscribe.admin.inc:334
+msgid "Only unsubscribed"
+msgstr ""
+
+#: email_subscribe.admin.inc:335
+msgid "Only re-subscribed"
+msgstr ""
+
+#: email_subscribe.admin.inc:343
+msgid "Search"
+msgstr ""
+
+#: email_subscribe.admin.inc:361;619;779
+msgid "Cancel"
+msgstr ""
+
+#: email_subscribe.admin.inc:367
+msgid "Status"
+msgstr ""
+
+#: email_subscribe.admin.inc:368
+msgid "Date subscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:369
+msgid "Date unsubscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:370
+msgid "Date re-subscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:371
+msgid "User performed an action"
+msgstr ""
+
+#: email_subscribe.admin.inc:372
+msgid "Actions"
+msgstr ""
+
+#: email_subscribe.admin.inc:417
+msgid "Confirm"
+msgstr ""
+
+#: email_subscribe.admin.inc:420
+msgid "To unsubscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:423 email_subscribe.user.inc:166
+msgid "Re-subscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:428
+msgid "Remove"
+msgstr ""
+
+#: email_subscribe.admin.inc:432
+msgid "I am"
+msgstr ""
+
+#: email_subscribe.admin.inc:435
+msgid "Anonymous"
+msgstr ""
+
+#: email_subscribe.admin.inc:456;592;922
 msgid "No data."
 msgstr ""
 
-#: email_subscribe.admin.inc:346
-msgid "Reset"
-msgstr ""
-
-#: email_subscribe.admin.inc:379;409;454 email_subscribe.user.inc:93;205;245;300 email_subscribe.module:290
+#: email_subscribe.admin.inc:498;528;571;829 email_subscribe.user.inc:92;201;241;295 email_subscribe.module:419;454
 msgid "Error"
 msgstr ""
 
-#: email_subscribe.admin.inc:399 email_subscribe.user.inc:235
+#: email_subscribe.admin.inc:518 email_subscribe.user.inc:231
 msgid "Email unsubscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:403 email_subscribe.user.inc:239
+#: email_subscribe.admin.inc:522 email_subscribe.user.inc:235
 msgid "Email already unsubscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:445 email_subscribe.user.inc:291
+#: email_subscribe.admin.inc:562 email_subscribe.user.inc:286
 msgid "Email re-subscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:448 email_subscribe.user.inc:294
+#: email_subscribe.admin.inc:565 email_subscribe.user.inc:289
 msgid "Email already re-subscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:24;25;26;27;28;29;30;31;32;33;34;35;36;37;38
+#: email_subscribe.admin.inc:597
+msgid "Are you sure you want to remove user with email %email?"
+msgstr ""
+
+#: email_subscribe.admin.inc:631
+msgid "Email %email was removed."
+msgstr ""
+
+#: email_subscribe.admin.inc:634
+msgid "Email %email was not removed."
+msgstr ""
+
+#: email_subscribe.admin.inc:645
+msgid "Email addresses"
+msgstr ""
+
+#: email_subscribe.admin.inc:648
+msgid "Email addresses must be separated by comma, space or newline."
+msgstr ""
+
+#: email_subscribe.admin.inc:652 email_subscribe.module:129
+msgid "Subscribe"
+msgstr ""
+
+#: email_subscribe.admin.inc:729
+msgid "The following addresses were added: %added."
+msgstr ""
+
+#: email_subscribe.admin.inc:732
+msgid "No addresses were added."
+msgstr ""
+
+#: email_subscribe.admin.inc:737
+msgid "The following addresses were invalid: %invalid."
+msgstr ""
+
+#: email_subscribe.admin.inc:742
+msgid "The following addresses were skipped: %skipped."
+msgstr ""
+
+#: email_subscribe.admin.inc:756
+msgid "Remove all data"
+msgstr ""
+
+#: email_subscribe.admin.inc:761
+msgid "Cleaning table with information about sent emails(read nodes)"
+msgstr ""
+
+#: email_subscribe.admin.inc:768
+msgid "Type of removing"
+msgstr ""
+
+#: email_subscribe.admin.inc:902
+msgid "The total number of subscribed the users"
+msgstr ""
+
+#: email_subscribe.admin.inc:903
+msgid "The total number of unsubscribed the users"
+msgstr ""
+
+#: email_subscribe.admin.inc:904
+msgid "The total number of re-subscribed and the active users"
+msgstr ""
+
+#: email_subscribe.admin.inc:905;906;907;908
+msgid "The total number the subscribed users from :post"
+msgstr ""
+
+#: email_subscribe.admin.inc:909
+msgid "The total number the subscribed users from other mail systems"
+msgstr ""
+
+#: email_subscribe.admin.inc:58;59;60;61;62;63;64;65;66;67;68;69;70;71;72
 msgid "Every 1 hour"
 msgid_plural "Every @count hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: email_subscribe.admin.inc:752;753;754;755
+msgid "Remove data older then 1 month"
+msgid_plural "Remove data older then @count months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: email_subscribe.admin.inc:825
+msgid "Was removed 1 row."
+msgid_plural "Was removed @count rows."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -203,19 +340,15 @@ msgstr[1] ""
 msgid "Perform subscription"
 msgstr ""
 
-#: email_subscribe.user.inc:32
-msgid "That e-mail address is not valid."
-msgstr ""
-
-#: email_subscribe.user.inc:113
+#: email_subscribe.user.inc:112
 msgid "Confirm email"
 msgstr ""
 
-#: email_subscribe.user.inc:196
+#: email_subscribe.user.inc:192
 msgid "Email confirmed."
 msgstr ""
 
-#: email_subscribe.user.inc:199
+#: email_subscribe.user.inc:195
 msgid "Email already confirmed."
 msgstr ""
 
@@ -227,100 +360,132 @@ msgstr ""
 msgid "Administer Email Subscribe module"
 msgstr ""
 
-#: email_subscribe.module:27
+#: email_subscribe.module:26
 msgid "View the subscribed users and settings for the module"
 msgstr ""
 
-#: email_subscribe.module:152 email_subscribe.info:0
+#: email_subscribe.module:201 email_subscribe.info:0
 msgid "Subscribe by email"
 msgstr ""
 
-#: email_subscribe.module:197
+#: email_subscribe.module:246
 msgid "Subscribe to new posts"
 msgstr ""
 
-#: email_subscribe.module:286
+#: email_subscribe.module:447
 msgid "Material added to the distribution list."
 msgstr ""
 
-#: email_subscribe.module:315
+#: email_subscribe.module:481
 msgid "New article on @site-name"
 msgstr ""
 
-#: email_subscribe.module:319
+#: email_subscribe.module:485
 msgid "Confirm email from @site-name to subscribe"
 msgstr ""
 
-#: email_subscribe.module:323
+#: email_subscribe.module:488
 msgid "Confirm to unsubscribe on the @site-name"
 msgstr ""
 
-#: email_subscribe.module:328
+#: email_subscribe.module:491
 msgid "Confirm to re-subscribe on the @site-name"
 msgstr ""
 
-#: email_subscribe.module:333
+#: email_subscribe.module:494
 msgid "New log entry in the module subscription on the site @site-name"
 msgstr ""
 
-#: email_subscribe.module:390
-msgid "Your message has been sent."
+#: email_subscribe.module:574
+msgid "In your e-mail address sent an email with further instructions."
 msgstr ""
 
-#: email_subscribe.module:393
+#: email_subscribe.module:577
 msgid "Subscribe email successful."
 msgstr ""
 
-#: email_subscribe.module:398
-msgid "@email has been @type."
+#: email_subscribe.module:582
+msgid "To email '@email' action was performed '@type'."
 msgstr ""
 
-#: email_subscribe.module:401
+#: email_subscribe.module:585
 msgid "Notification to the site administrator has been sent."
 msgstr ""
 
-#: email_subscribe.module:404
+#: email_subscribe.module:588
 msgid "Notification to the site administrator has been NOT sent."
 msgstr ""
 
-#: email_subscribe.module:409
+#: email_subscribe.module:593
 msgid "There was a problem sending your message and it was not sent."
 msgstr ""
 
-#: email_subscribe.module:26
+#: email_subscribe.module:448
+msgid "email-subscribe-info"
+msgstr ""
+
+#: email_subscribe.module:448
+msgid "Node with ID %node added to the distribution list"
+msgstr ""
+
+#: email_subscribe.module:25
 msgid "Email Subscribe"
 msgstr ""
 
-#: email_subscribe.module:35
+#: email_subscribe.module:34
 msgid "List of subscribed users"
 msgstr ""
 
-#: email_subscribe.module:41
+#: email_subscribe.module:40
+msgid "Mass Subscribe"
+msgstr ""
+
+#: email_subscribe.module:49
+msgid "Mass Subscribe by email"
+msgstr ""
+
+#: email_subscribe.module:58 email_subscribe.install:20
+msgid "Configuration"
+msgstr ""
+
+#: email_subscribe.module:67
 msgid "Email Subscribe settings"
 msgstr ""
 
-#: email_subscribe.module:51;88;98
+#: email_subscribe.module:73
+msgid "Cleaning the database"
+msgstr ""
+
+#: email_subscribe.module:82
+msgid "Statistics"
+msgstr ""
+
+#: email_subscribe.module:91;137;147
 msgid "Confirm email address"
 msgstr ""
 
-#: email_subscribe.module:60
+#: email_subscribe.module:100
 msgid "Unsubscribe email address"
 msgstr ""
 
-#: email_subscribe.module:69;126
+#: email_subscribe.module:109;175
 msgid "Re-subscribe email address"
 msgstr ""
 
-#: email_subscribe.module:80
-msgid "Subscribe"
+#: email_subscribe.module:118
+msgid "Remove email address"
 msgstr ""
 
-#: email_subscribe.module:117
+#: email_subscribe.module:166
 msgid "Confirm unsubscribe email address"
 msgstr ""
 
-#: email_subscribe.module:136
+#: email_subscribe.module:185
 msgid "Confirm re-subscribe email address"
+msgstr ""
+
+#: email_subscribe.install:20
+msgid "You need to set email templates for email subscribe module."
 msgstr ""
 
 #: email_subscribe.info:0

@@ -1,3 +1,11 @@
+Version 1.0.4
+-Added ability to grouping materials in one email letter;
+-Added ability does not store information about sent emails;
+-Added form for cleaning of database;
+-Added form of statistics;
+-Added button "Preview" on the settings page;
+-Rewritten code for the search for to support pagination;
+
 Version 1.0.3.3
 -Time for execute cron job was is too small. Setting the execution time=limit of emails/2;
 -Refactoring code;
