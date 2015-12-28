@@ -172,10 +172,3 @@ function email_subscribe_update_7101(){
   db_change_field('email_subscribe_users', 'datechange', 'datechange', $field);
   db_change_field('email_subscribe_readed_nodes', 'datechange', 'datechange', $field);
 }
-
-/**
- * Remove email_subscribe from queue list
- */
-function email_subscribe_update_7102(){
-  db_delete('queue')->condition('name', 'email_subscribe')->execute();
-}

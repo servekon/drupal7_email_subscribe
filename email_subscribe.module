@@ -400,6 +400,7 @@ function _email_subscribe_send_by_cron($item){
       else{
         db_delete('email_subscribe_readed_nodes')
         ->condition('rn_id', $item->rn_id, 'IN')->execute();
+        db_query('OPTIMIZE TABLE {email_subscribe_readed_nodes}');
       }
     }
   }
