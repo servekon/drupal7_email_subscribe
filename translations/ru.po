@@ -1,23 +1,24 @@
 # $Id$
 #
 # Russian translation of Drupal (general)
-# Copyright servekon
+# Copyright Konstantin Lukas servekon@yahoo.com
 # Generated from files:
 #  email_subscribe.admin.inc: n/a
 #  email_subscribe.module: n/a
 #  email_subscribe.user.inc: n/a
+#  email_subscribe.install: n/a
 #  email_subscribe.info: n/a
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: email_subscribe-7.x-1.0\n"
-"POT-Creation-Date: 2014-01-11 09:00+0200\n"
-"PO-Revision-Date: 2015-12-23 23:00+0200\n"
-"Last-Translator: Konstantin Lukas\n"
-"Language-Team: Email subscribe\n"
+"Project-Id-Version: email_subscribe-7.x-1.0.5\n"
+"POT-Creation-Date: 2016-12-10 19:48+0300\n"
+"PO-Revision-Date: 2016-12-10 19:48+0300\n"
+"Last-Translator: Konstantin Lukas <servekon@yahoo.com>\n"
+"Language-Team: Russian <servekon@yahoo.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 
@@ -68,7 +69,7 @@ msgstr ""
 msgid "No"
 msgstr "Нет"
 
-#: email_subscribe.admin.inc:89;613;774
+#: email_subscribe.admin.inc:89;613;780
 msgid "Yes"
 msgstr "Да"
 
@@ -90,7 +91,7 @@ msgstr ""
 "Доступно использование следующих "
 "маркеров"
 
-#: email_subscribe.admin.inc:110;133;151;182 email_subscribe.user.inc:139 email_subscribe.module:156
+#: email_subscribe.admin.inc:110;133;151;182 email_subscribe.user.inc:123 email_subscribe.module:156
 msgid "Unsubscribe"
 msgstr "Отписаться"
 
@@ -152,6 +153,10 @@ msgstr ""
 "Текст письма при возобновлении "
 "подписки"
 
+#: email_subscribe.admin.inc:277 email_subscribe.module:365
+msgid "Preview"
+msgstr "Предпросмотр"
+
 #: email_subscribe.admin.inc:296 email_subscribe.user.inc:31
 msgid "That e-mail address is not valid."
 msgstr ""
@@ -170,7 +175,11 @@ msgstr "Подписан"
 msgid "Unsubscribed"
 msgstr "Не подписан"
 
-#: email_subscribe.admin.inc:331;366 email_subscribe.user.inc:12;105;132;159
+#: email_subscribe.admin.inc:322;329;357
+msgid "Filter"
+msgstr "Фильтр"
+
+#: email_subscribe.admin.inc:331;366 email_subscribe.user.inc:12;89;116;143
 msgid "Email"
 msgstr "email"
 
@@ -191,6 +200,14 @@ msgstr "Только не подписанные"
 #: email_subscribe.admin.inc:335
 msgid "Only re-subscribed"
 msgstr "Только с возобновленной подпиской"
+
+#: email_subscribe.admin.inc:343
+msgid "Search"
+msgstr "Поиск"
+
+#: email_subscribe.admin.inc:361;619;785
+msgid "Cancel"
+msgstr "Отменить"
 
 #: email_subscribe.admin.inc:367
 msgid "Status"
@@ -224,7 +241,7 @@ msgstr "Подтвердить"
 msgid "To unsubscribe"
 msgstr "Отменить подписку"
 
-#: email_subscribe.admin.inc:423 email_subscribe.user.inc:166
+#: email_subscribe.admin.inc:423 email_subscribe.user.inc:150
 msgid "Re-subscribe"
 msgstr "Возобновить подписку"
 
@@ -240,27 +257,27 @@ msgstr "Я"
 msgid "Anonymous"
 msgstr "Гость"
 
-#: email_subscribe.admin.inc:456;592;922
+#: email_subscribe.admin.inc:456;592;955
 msgid "No data."
 msgstr "Данных нет."
 
-#: email_subscribe.admin.inc:498;528;571;829 email_subscribe.user.inc:92;201;241;295 email_subscribe.module:419;454
+#: email_subscribe.admin.inc:498;528;571;862 email_subscribe.user.inc:76;206;246;302 email_subscribe.module:418;454
 msgid "Error"
 msgstr "Ошибка"
 
-#: email_subscribe.admin.inc:518 email_subscribe.user.inc:231
+#: email_subscribe.admin.inc:518 email_subscribe.user.inc:236
 msgid "Email unsubscribed."
 msgstr "Подписка аннулирована."
 
-#: email_subscribe.admin.inc:522 email_subscribe.user.inc:235
+#: email_subscribe.admin.inc:522 email_subscribe.user.inc:240
 msgid "Email already unsubscribed."
 msgstr "Подписка уже была аннулирована."
 
-#: email_subscribe.admin.inc:562 email_subscribe.user.inc:286
+#: email_subscribe.admin.inc:562 email_subscribe.user.inc:293
 msgid "Email re-subscribed."
 msgstr "Email подписан заново."
 
-#: email_subscribe.admin.inc:565 email_subscribe.user.inc:289
+#: email_subscribe.admin.inc:565 email_subscribe.user.inc:296
 msgid "Email already re-subscribed."
 msgstr "Email уже был подписан заново."
 
@@ -325,32 +342,40 @@ msgstr ""
 msgid "Type of removing"
 msgstr "Тип очистки"
 
-#: email_subscribe.admin.inc:902
+#: email_subscribe.admin.inc:775
+msgid "Remove users with unconfirmed emails"
+msgstr "Удалить пользователей с неподтвержденным email"
+
+#: email_subscribe.admin.inc:852;853 email_subscribe.install:201
+msgid "For users with unconfirmed email, from %table table."
+msgstr "Для пользователей с неподтвержденным email, из таблицы %table."
+
+#: email_subscribe.admin.inc:935
 msgid "The total number of subscribed the users"
 msgstr ""
 "Общее количество подписанных "
 "пользователей"
 
-#: email_subscribe.admin.inc:903
+#: email_subscribe.admin.inc:936
 msgid "The total number of unsubscribed the users"
 msgstr ""
 "Общее количество отписавшися "
 "пользователей"
 
-#: email_subscribe.admin.inc:904
+#: email_subscribe.admin.inc:937
 msgid "The total number of re-subscribed and the active users"
 msgstr ""
 "Общее количество активный "
 "пользователей, которые возобновили "
 "подписку"
 
-#: email_subscribe.admin.inc:905;906;907;908
+#: email_subscribe.admin.inc:938;939;940;941
 msgid "The total number the subscribed users from :post"
 msgstr ""
 "Общее количество пользователей "
 "почтовой службы :post"
 
-#: email_subscribe.admin.inc:909
+#: email_subscribe.admin.inc:942
 msgid "The total number the subscribed users from other mail systems"
 msgstr ""
 "Общее количество пользователей из "
@@ -370,26 +395,26 @@ msgstr[0] "Удалить данные старше @count месяца"
 msgstr[1] "Удалить данные старше @count месяцев"
 msgstr[2] "Удалить данные старше @count месяцев"
 
-#: email_subscribe.admin.inc:825
+#: email_subscribe.admin.inc:852;853;858 email_subscribe.install:201
 msgid "Was removed 1 row."
 msgid_plural "Was removed @count rows."
-msgstr[0] "Была удалена @count строка"
-msgstr[1] "Было удалено @count строки"
-msgstr[2] "Было удалено @count строк"
+msgstr[0] "Была удалена @count строка."
+msgstr[1] "Было удалено @count строки."
+msgstr[2] "Было удалено @count строк."
 
 #: email_subscribe.user.inc:19
 msgid "Perform subscription"
 msgstr "Подписаться"
 
-#: email_subscribe.user.inc:112
+#: email_subscribe.user.inc:96
 msgid "Confirm email"
 msgstr "Подтвердить email"
 
-#: email_subscribe.user.inc:192
+#: email_subscribe.user.inc:197
 msgid "Email confirmed."
 msgstr "Ваш email подтвержден."
 
-#: email_subscribe.user.inc:195
+#: email_subscribe.user.inc:200
 msgid "Email already confirmed."
 msgstr "Ваш email уже был подтвержден."
 
@@ -504,6 +529,10 @@ msgid "Mass Subscribe by email"
 msgstr ""
 "Массовая подписка по электронной "
 "почте"
+
+#: email_subscribe.module:58 email_subscribe.install:20
+msgid "Configuration"
+msgstr "Конфигурация"
 
 #: email_subscribe.module:67
 msgid "Email Subscribe settings"

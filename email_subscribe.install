@@ -179,3 +179,41 @@ function email_subscribe_update_7101(){
 function email_subscribe_update_7102(){
   db_delete('queue')->condition('name', 'email_subscribe')->execute();
 }
+
+/**
+ * 1. Delete data from table "email_subscribe_readed_nodes" for users with unconfirmed emails.
+ * 2. Update translation file.
+ * 3. Update field "datechange"
+ */
+function email_subscribe_update_7103(){
+  //~ 1.
+  $usdel = db_select('email_subscribe_users', 'u')
+  ->fields('u', array('sid'))
+  ->condition('status', 1)
+  ->execute()
+  ->fetchAllAssoc('sid');
+
+  if(sizeof($usdel) > 0){
+    $delRN = db_delete('email_subscribe_readed_nodes')
+    ->condition('rn_sid', array_keys($usdel), 'IN')
+    ->execute();
+    
+    drupal_set_message(format_plural($delRN, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with not confirmed email, from %table table.', array('%table'=>'email_subscribe_readed_nodes')), 'warning');
+  }
+  
+  //~ 2.
+  if (module_exists('locale')) {
+    locale_system_update(array('email_subscribe'));
+  }
+  
+  //~ 3.
+  db_update('email_subscribe_users')
+  ->fields(array('datechange'=>REQUEST_TIME))
+  ->condition('datechange', 0)
+  ->execute();
+  
+  db_update('email_subscribe_readed_nodes')
+  ->fields(array('datechange'=>REQUEST_TIME))
+  ->condition('datechange', 0)
+  ->execute();
+}

@@ -6,14 +6,14 @@
 #  email_subscribe.admin.inc: n/a
 #  email_subscribe.module: n/a
 #  email_subscribe.user.inc: n/a
-#  email_subscribe.info: n/a
 #  email_subscribe.install: n/a
+#  email_subscribe.info: n/a
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-12-24 00:48+0300\n"
+"POT-Creation-Date: 2016-12-12 15:03+0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -58,7 +58,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: email_subscribe.admin.inc:89;613;774
+#: email_subscribe.admin.inc:89;613;780
 msgid "Yes"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr ""
 msgid "You may include placeholders like"
 msgstr ""
 
-#: email_subscribe.admin.inc:110;133;151;182 email_subscribe.user.inc:139 email_subscribe.module:156
+#: email_subscribe.admin.inc:110;133;151;182 email_subscribe.user.inc:123 email_subscribe.module:156
 msgid "Unsubscribe"
 msgstr ""
 
@@ -146,7 +146,7 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: email_subscribe.admin.inc:331;366 email_subscribe.user.inc:12;105;132;159
+#: email_subscribe.admin.inc:331;366 email_subscribe.user.inc:12;89;116;143
 msgid "Email"
 msgstr ""
 
@@ -170,7 +170,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: email_subscribe.admin.inc:361;619;779
+#: email_subscribe.admin.inc:361;619;785
 msgid "Cancel"
 msgstr ""
 
@@ -206,7 +206,7 @@ msgstr ""
 msgid "To unsubscribe"
 msgstr ""
 
-#: email_subscribe.admin.inc:423 email_subscribe.user.inc:166
+#: email_subscribe.admin.inc:423 email_subscribe.user.inc:150
 msgid "Re-subscribe"
 msgstr ""
 
@@ -222,27 +222,27 @@ msgstr ""
 msgid "Anonymous"
 msgstr ""
 
-#: email_subscribe.admin.inc:456;592;922
+#: email_subscribe.admin.inc:456;592;955
 msgid "No data."
 msgstr ""
 
-#: email_subscribe.admin.inc:498;528;571;829 email_subscribe.user.inc:92;201;241;295 email_subscribe.module:419;454
+#: email_subscribe.admin.inc:498;528;571;862 email_subscribe.user.inc:76;206;246;302 email_subscribe.module:418;454
 msgid "Error"
 msgstr ""
 
-#: email_subscribe.admin.inc:518 email_subscribe.user.inc:231
+#: email_subscribe.admin.inc:518 email_subscribe.user.inc:236
 msgid "Email unsubscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:522 email_subscribe.user.inc:235
+#: email_subscribe.admin.inc:522 email_subscribe.user.inc:240
 msgid "Email already unsubscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:562 email_subscribe.user.inc:286
+#: email_subscribe.admin.inc:562 email_subscribe.user.inc:293
 msgid "Email re-subscribed."
 msgstr ""
 
-#: email_subscribe.admin.inc:565 email_subscribe.user.inc:289
+#: email_subscribe.admin.inc:565 email_subscribe.user.inc:296
 msgid "Email already re-subscribed."
 msgstr ""
 
@@ -298,23 +298,23 @@ msgstr ""
 msgid "Type of removing"
 msgstr ""
 
-#: email_subscribe.admin.inc:902
+#: email_subscribe.admin.inc:935
 msgid "The total number of subscribed the users"
 msgstr ""
 
-#: email_subscribe.admin.inc:903
+#: email_subscribe.admin.inc:936
 msgid "The total number of unsubscribed the users"
 msgstr ""
 
-#: email_subscribe.admin.inc:904
+#: email_subscribe.admin.inc:937
 msgid "The total number of re-subscribed and the active users"
 msgstr ""
 
-#: email_subscribe.admin.inc:905;906;907;908
+#: email_subscribe.admin.inc:938;939;940;941
 msgid "The total number the subscribed users from :post"
 msgstr ""
 
-#: email_subscribe.admin.inc:909
+#: email_subscribe.admin.inc:942
 msgid "The total number the subscribed users from other mail systems"
 msgstr ""
 
@@ -330,7 +330,7 @@ msgid_plural "Remove data older then @count months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: email_subscribe.admin.inc:825
+#: email_subscribe.admin.inc:858 email_subscribe.install:201
 msgid "Was removed 1 row."
 msgid_plural "Was removed @count rows."
 msgstr[0] ""
@@ -340,15 +340,15 @@ msgstr[1] ""
 msgid "Perform subscription"
 msgstr ""
 
-#: email_subscribe.user.inc:112
+#: email_subscribe.user.inc:96
 msgid "Confirm email"
 msgstr ""
 
-#: email_subscribe.user.inc:192
+#: email_subscribe.user.inc:197
 msgid "Email confirmed."
 msgstr ""
 
-#: email_subscribe.user.inc:195
+#: email_subscribe.user.inc:200
 msgid "Email already confirmed."
 msgstr ""
 
@@ -358,10 +358,6 @@ msgstr ""
 
 #: email_subscribe.module:11
 msgid "Administer Email Subscribe module"
-msgstr ""
-
-#: email_subscribe.module:26
-msgid "View the subscribed users and settings for the module"
 msgstr ""
 
 #: email_subscribe.module:201 email_subscribe.info:0
@@ -432,6 +428,10 @@ msgstr ""
 msgid "Email Subscribe"
 msgstr ""
 
+#: email_subscribe.module:26
+msgid "View the subscribed users and settings for the module"
+msgstr ""
+
 #: email_subscribe.module:34
 msgid "List of subscribed users"
 msgstr ""
@@ -486,6 +486,10 @@ msgstr ""
 
 #: email_subscribe.install:20
 msgid "You need to set email templates for email subscribe module."
+msgstr ""
+
+#: email_subscribe.install:201
+msgid "For users with not confirmed email, from %table table."
 msgstr ""
 
 #: email_subscribe.info:0

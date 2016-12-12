@@ -759,6 +759,7 @@ function email_subscribe_clean_database_form($form=array(), &$form_state){
   $form['es_yes'] = array(
     '#type' => 'item',
     '#title' => t('Cleaning table with information about sent emails(read nodes)'),
+    //~ '#markup' => t('After unlocking will be available to unload all the previously listed indications.'),
     '#weight' => -1,
   );
   
@@ -768,6 +769,7 @@ function email_subscribe_clean_database_form($form=array(), &$form_state){
     '#options' => $options,
     '#default_value' => 1,
   );
+  
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Yes'),
@@ -820,6 +822,7 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
       ':status' => NODE_PUBLISHED,
       ':changed'=> $changed)
     )->rowCount();
+    
     db_query('OPTIMIZE TABLE {email_subscribe_readed_nodes}');
     drupal_set_message(format_plural($sql, 'Was removed 1 row.', 'Was removed @count rows.'), 'warning');
   }
@@ -921,5 +924,6 @@ function email_subscribe_statistics_page(){
       'empty' => t('No data.'),
     )
   );
+  
   return $out;
 }

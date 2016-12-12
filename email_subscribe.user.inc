@@ -63,26 +63,10 @@ function email_subscribe_subscribe_form_submit($form, &$form_state){
         'uid'=>$user->uid,
         'email'=>check_plain($email),
         'status'=>1,
+        'datechange'=>REQUEST_TIME,
       ))->execute();
-      
       if($new){
-        $nids = db_select('node', 'n')
-        ->fields('n', array('nid', 'status'))
-        ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
-        ->execute();
-        foreach($nids as $val){
-          $values[] = array(
-            'rn_nid' => $val->nid,
-            'rn_sid' => (int)$new,
-            'rn_status' => (int)$val->status,
-          );
-        }
-        unset($val);
-        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status'));
-        foreach ($values as $record) {
-          $query->values($record);
-        }
-        $query->execute();
+        //~ Send email
         email_subcribe_send_email_letter($email);
       }
     }
@@ -184,11 +168,32 @@ function email_subscribe_confirmemail_token($token=''){
     try{
       $tokenUns = email_subscribe_generate_token('',1,FALSE);
       $res = db_update('email_subscribe_users')
-      ->fields(array('unsubs_token' => $tokenUns, 'status' => 2, 'date_subscribe' => date('Y-m-d H:i:s')))
+      ->fields(array('unsubs_token' => $tokenUns, 'status' => 2, 'date_subscribe' => date('Y-m-d H:i:s'), 'datechange'=>REQUEST_TIME))
       ->condition('status', 1)
       ->condition('subs_token', check_plain($token))
       ->execute();
       if(!empty($res)){
+        //~ Fill table for unpublished nodes
+        $nids = db_select('node', 'n')
+        ->fields('n', array('nid', 'status'))
+        ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
+        ->condition('status', NODE_PUBLISHED, '<>')
+        ->execute();
+        foreach($nids as $val){
+          $values[] = array(
+            'rn_nid' => $val->nid,
+            'rn_sid' => (int)$new,
+            'rn_status' => (int)$val->status,
+            'datechange' => REQUEST_TIME,
+          );
+        }
+        unset($val);
+        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status', 'datechange'));
+        foreach ($values as $record) {
+          $query->values($record);
+        }
+        $query->execute();
+        
         drupal_set_message(t('Email confirmed.'));
       }
       else{
@@ -212,7 +217,7 @@ function email_subscribe_unsubscribe_token($token=''){
   if(!empty($token)){
     try{
       $res = db_update('email_subscribe_users')
-      ->fields(array('status' => 3, 'date_unsubscribe' => date('Y-m-d H:i:s')))
+      ->fields(array('status' => 3, 'date_unsubscribe' => date('Y-m-d H:i:s'), 'datechange'=>REQUEST_TIME))
       ->condition('status', 2)
       ->condition('unsubs_token', check_plain($token))
       ->execute();
@@ -252,7 +257,7 @@ function email_subscribe_resubscribe_token($token=''){
   if(!empty($token)){
     try{
       $res = db_update('email_subscribe_users')
-      ->fields(array('status' => 2, 'date_resubscribe' => date('Y-m-d H:i:s')))
+      ->fields(array('status' => 2, 'date_resubscribe' => date('Y-m-d H:i:s'), 'datechange'=>REQUEST_TIME))
       ->condition('status', 3)
       ->condition('subs_token', check_plain($token))
       ->execute();
@@ -267,6 +272,7 @@ function email_subscribe_resubscribe_token($token=''){
         $nids = db_select('node', 'n')
         ->fields('n', array('nid', 'status'))
         ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
+        ->condition('status', NODE_PUBLISHED, '<>')
         ->execute();
         
         foreach($nids as $val){
@@ -274,10 +280,11 @@ function email_subscribe_resubscribe_token($token=''){
             'rn_nid' => $val->nid,
             'rn_sid' => (int)$sid->sid,
             'rn_status' => (int)$val->status,
+            'datechange' => REQUEST_TIME,
           );
         }
         unset($val);
-        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status'));
+        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status', 'datechange'));
         foreach ($values as $record) {
           $query->values($record);
         }

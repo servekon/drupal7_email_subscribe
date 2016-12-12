@@ -1,3 +1,10 @@
+Foreword. Sorry for translate via Google Translate.
+
+Version 1.0.5
+-Filling 'email_subscribe_readed_nodes' for new user moved from registering to when user confirm email;
+-Now when added new subscriber set to updating field 'datechange';
+-Fixed few issues;
+
 Version 1.0.4
 -Added ability to grouping materials in one email letter;
 -Added ability does not store information about sent emails;

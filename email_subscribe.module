@@ -23,7 +23,7 @@ function email_subscribe_menu() {
    * */
   $menu['admin/config/services/email_subscribe'] = array(
     'title' => 'Email Subscribe',
-    'description' => t('View the subscribed users and settings for the module'),
+    'description' => 'View the subscribed users and settings for the module',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('email_subscribe_list_users_form'),
     'access arguments' => array('administer email_subscribe'),
@@ -124,6 +124,7 @@ function email_subscribe_menu() {
   );
   
   //~ User menu
+  
   $menu['email-subscribe'] = array(
     'title' => 'Subscribe',
     'page callback' => 'drupal_get_form',
@@ -255,6 +256,15 @@ function email_subscribe_cron() {
   $interval = variable_get('email_subscribe_interval', 60*60);
   $limit  = (int)variable_get('email_subscribe_limit', 15);
   $isGorup = (bool)variable_get('email_subscribe_group_nodes', 0);
+
+//~ SELECT GROUP_CONCAT(  `rn_nid` ) nid, b.email, GROUP_CONCAT( a.rn_id ) rn_id, a.rn_sid
+//~ FROM  `drupal7_email_subscribe_readed_nodes` AS a
+//~ INNER JOIN drupal7_email_subscribe_users AS b ON a.rn_sid = b.sid
+//~ INNER JOIN drupal7_node AS c ON c.nid = a.rn_nid
+//~ WHERE b.status =2
+//~ AND a.rn_status =0
+//~ AND c.status =1
+//~ GROUP BY rn_sid
 
   if (REQUEST_TIME >= variable_get('email_subscribe_next_execution', 0)) {
     $arrRes = array();
@@ -394,7 +404,7 @@ function _email_subscribe_send_by_cron($item){
     
     if(email_subcribe_send_email_letter($item->email, 0, $msg)){
       if(!$isClean){
-        db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1))
+        db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1, 'datechange'=>REQUEST_TIME))
         ->condition('rn_id', $item->rn_id, 'IN')->execute();
       }
       else{
@@ -424,10 +434,11 @@ function email_subscribe_node_insert($node) {
         $values[] = array(
           'rn_nid' => $node->nid,
           'rn_sid' => (int)$val->sid,
+          'datechange' => REQUEST_TIME,
         );
       }
       unset($val);
-      $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid'));
+      $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'datechange'));
       foreach ($values as $record) {
         $query->values($record);
       }
@@ -568,7 +579,7 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
         //~ Send notification to the site admin
         if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0 and $type > 0){
           $admEmail = variable_get('site_mail');
-          $params['message'] = t("To email '@email' action was performed '@type'.", array('@email'=>$to, '@type'=>t($arrAdm[$type])));
+          $params['message'] = t("To email '@email' action was performed '@type'.", array('@email'=>$to, '@type'=>t((string)$arrAdm[$type])));
           $toAdmin = drupal_mail('email_subscribe', 'admin_notice', $admEmail, $language, $params, $from, $send);
           if($toAdmin['result'] == TRUE and $isAdmin){
             drupal_set_message(t('Notification to the site administrator has been sent.'), 'status', FALSE);
@@ -606,7 +617,7 @@ function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
     try{
       $arrFields = array('subs_token','unsubs_token');
       db_update('email_subscribe_users')
-      ->fields(array($arrFields[$type] => $token))
+      ->fields(array($arrFields[$type] => $token, 'datechange'=>REQUEST_TIME))
       ->condition('email', check_plain($email))
       ->execute();
     }
