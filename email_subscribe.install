@@ -111,14 +111,14 @@ function email_subscribe_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => FALSE,
-        'default' => NULL,
+        'default' => 0,
         'description'=> "Node ID"
       ),
       'rn_sid' =>  array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => FALSE,
-        'default' => NULL, 
+        'default' => 0, 
         'description'=> "Subscribe user id"
       ),
       'rn_status' =>  array(
@@ -215,5 +215,15 @@ function email_subscribe_update_7103(){
   db_update('email_subscribe_readed_nodes')
   ->fields(array('datechange'=>REQUEST_TIME))
   ->condition('datechange', 0)
+  ->execute();
+}
+
+/**
+ * Delete records with subsribe_user_id(rn_sid) = 0 from the {email_subscribe_readed_nodes} table.
+ * Version 1.0.5.1
+ */
+function email_subscribe_update_7104(){
+  db_delete('email_subscribe_readed_nodes')
+  ->condition('rn_sid', 0)
   ->execute();
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Settings form
  * */
@@ -493,7 +494,7 @@ function _email_subscribe_confirmemail_by_admin($sid=0){
       drupal_goto('admin/config/services/email_subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
   }
@@ -523,7 +524,7 @@ function _email_subscribe_unsubscribe_by_admin($sid=0){
       drupal_goto('admin/config/services/email_subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
   }
@@ -566,7 +567,7 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
       drupal_goto('admin/config/services/email_subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return '';
     }
   }

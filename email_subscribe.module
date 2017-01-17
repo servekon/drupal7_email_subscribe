@@ -13,6 +13,7 @@ function email_subscribe_permission(){
     ),
   );
 }
+
 /**
  * Implementation of hook_menu
  * */
@@ -612,7 +613,7 @@ function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
       ->execute();
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message('Error'); return false;
     }
   }
