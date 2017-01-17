@@ -257,6 +257,15 @@ function email_subscribe_cron() {
   $limit  = (int)variable_get('email_subscribe_limit', 15);
   $isGorup = (bool)variable_get('email_subscribe_group_nodes', 0);
 
+//~ SELECT GROUP_CONCAT(  `rn_nid` ) nid, b.email, GROUP_CONCAT( a.rn_id ) rn_id, a.rn_sid
+//~ FROM  `drupal7_email_subscribe_readed_nodes` AS a
+//~ INNER JOIN drupal7_email_subscribe_users AS b ON a.rn_sid = b.sid
+//~ INNER JOIN drupal7_node AS c ON c.nid = a.rn_nid
+//~ WHERE b.status =2
+//~ AND a.rn_status =0
+//~ AND c.status =1
+//~ GROUP BY rn_sid
+
   if (REQUEST_TIME >= variable_get('email_subscribe_next_execution', 0)) {
     $arrRes = array();
     
@@ -613,7 +622,7 @@ function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
       ->execute();
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message('Error'); return false;
     }
   }

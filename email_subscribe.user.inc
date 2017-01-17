@@ -72,12 +72,53 @@ function email_subscribe_subscribe_form_submit($form, &$form_state){
     }
   }
   catch(Exception $e){
-    watchdog_exception('error', $e);
+    watchdog_exception('email-subscribe-error', $e);
     drupal_set_message(t('Error'), 'error'); return false;
   }
   return true;
 }
 
+/**
+ * When the user confirms the e-mail address or renew a subscription, 
+ * we need to fill in the table 'email_subscribe_readed_nodes'.
+ * */
+function _email_subscribe_fill_readed_nodes($token){
+  try{
+    //~ Fill table for unpublished nodes
+    $sid = db_select('email_subscribe_users', 'u')
+    ->fields('u', array('sid'))
+    ->condition('subs_token', check_plain($token))
+    ->execute()
+    ->fetchObject();
+    
+    $nids = db_select('node', 'n')
+    ->fields('n', array('nid', 'status'))
+    ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
+    ->condition('status', NODE_PUBLISHED, '<>')
+    ->execute();
+    if($nids->rowCount() > 0){
+      foreach($nids as $val){
+        $values[] = array(
+          'rn_nid' => $val->nid,
+          'rn_sid' => (int)$sid->sid,
+          'rn_status' => (int)$val->status,
+          'datechange' => REQUEST_TIME,
+        );
+      }
+      unset($val);
+      $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status', 'datechange'));
+      foreach ($values as $record) {
+        $query->values($record);
+      }
+      $query->execute();
+    }
+  }
+  catch(Exception $e){
+    watchdog_exception('email-subscribe-error', $e);
+    drupal_set_message(t('Error'), 'error'); return false;
+  }
+  return true;
+}
 /**
  * Form for re-sending messages with confirmation
  * */
@@ -173,36 +214,17 @@ function email_subscribe_confirmemail_token($token=''){
       ->condition('subs_token', check_plain($token))
       ->execute();
       if(!empty($res)){
-        //~ Fill table for unpublished nodes
-        $nids = db_select('node', 'n')
-        ->fields('n', array('nid', 'status'))
-        ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
-        ->condition('status', NODE_PUBLISHED, '<>')
-        ->execute();
-        foreach($nids as $val){
-          $values[] = array(
-            'rn_nid' => $val->nid,
-            'rn_sid' => (int)$new,
-            'rn_status' => (int)$val->status,
-            'datechange' => REQUEST_TIME,
-          );
+        if(_email_subscribe_fill_readed_nodes($token)){
+          drupal_set_message(t('Email confirmed.'));
         }
-        unset($val);
-        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status', 'datechange'));
-        foreach ($values as $record) {
-          $query->values($record);
-        }
-        $query->execute();
-        
-        drupal_set_message(t('Email confirmed.'));
       }
       else{
         drupal_set_message(t('Email already confirmed.'), 'warning');
       }
-      drupal_goto();
+      drupal_goto('email-subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
   }
@@ -239,10 +261,10 @@ function email_subscribe_unsubscribe_token($token=''){
       else{
         drupal_set_message(t('Email already unsubscribed.'), 'warning');
       }
-      drupal_goto();
+      drupal_goto('email-subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
   }
@@ -262,43 +284,17 @@ function email_subscribe_resubscribe_token($token=''){
       ->condition('subs_token', check_plain($token))
       ->execute();
       if(!empty($res)){
-        //~ Need fill table to set readed nodes for this user
-        $sid = db_select('email_subscribe_users', 'u')
-        ->fields('u', array('sid'))
-        ->condition('subs_token', check_plain($token))
-        ->execute()
-        ->fetchObject();
-        
-        $nids = db_select('node', 'n')
-        ->fields('n', array('nid', 'status'))
-        ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
-        ->condition('status', NODE_PUBLISHED, '<>')
-        ->execute();
-        
-        foreach($nids as $val){
-          $values[] = array(
-            'rn_nid' => $val->nid,
-            'rn_sid' => (int)$sid->sid,
-            'rn_status' => (int)$val->status,
-            'datechange' => REQUEST_TIME,
-          );
+        if(_email_subscribe_fill_readed_nodes($token)){
+          drupal_set_message(t('Email re-subscribed.'));
         }
-        unset($val);
-        $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status', 'datechange'));
-        foreach ($values as $record) {
-          $query->values($record);
-        }
-        $query->execute();
-        
-        drupal_set_message(t('Email re-subscribed.'));
       }
       else{
         drupal_set_message(t('Email already re-subscribed.'), 'warning');
       }
-      drupal_goto();
+      drupal_goto('email-subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('error', $e);
+      watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return '';
     }
   }
