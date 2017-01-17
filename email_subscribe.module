@@ -13,7 +13,6 @@ function email_subscribe_permission(){
     ),
   );
 }
-
 /**
  * Implementation of hook_menu
  * */
