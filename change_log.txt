@@ -1,14 +1,9 @@
 Foreword. Sorry for translate via Google Translate.
 
-Version 1.0.5.1
--Filling 'email_subscribe_readed_nodes' allocated in a separate function. 
- Fixed error when user confirm email(the variable $new was not defined, bug from version 1.0.5);
--Change all type of watchdog_exception to 'email-subscribe-error';
--Replaced drupal_goto() to the drupal_goto('email-subscribe'). For correctly work with cache modules;
-
 Version 1.0.5
 -Filling 'email_subscribe_readed_nodes' for new user moved from registering to when user confirm email;
 -Now when added new subscriber set to updating field 'datechange';
+-Fixed few issues;
 
 Version 1.0.4
 -Added ability to grouping materials in one email letter;

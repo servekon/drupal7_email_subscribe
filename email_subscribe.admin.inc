@@ -494,7 +494,7 @@ function _email_subscribe_confirmemail_by_admin($sid=0){
       drupal_goto('admin/config/services/email_subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('email-subscribe-error', $e);
+      watchdog_exception('error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
   }
@@ -524,7 +524,7 @@ function _email_subscribe_unsubscribe_by_admin($sid=0){
       drupal_goto('admin/config/services/email_subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('email-subscribe-error', $e);
+      watchdog_exception('error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
   }
@@ -567,7 +567,7 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
       drupal_goto('admin/config/services/email_subscribe');
     }
     catch(Exception $e){
-      watchdog_exception('email-subscribe-error', $e);
+      watchdog_exception('error', $e);
       drupal_set_message(t('Error'), 'error'); return '';
     }
   }
@@ -770,11 +770,6 @@ function email_subscribe_clean_database_form($form=array(), &$form_state){
     '#default_value' => 1,
   );
   
-  /*$form['es_del_not_confimed'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Remove users with unconfirmed emails'),
-  );*/
-  
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Yes'),
@@ -827,32 +822,6 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
       ':status' => NODE_PUBLISHED,
       ':changed'=> $changed)
     )->rowCount();
-    
-    //~ Delete data for users with uconfirmed emails
-    /*if($es_del_not_confimed){
-      $usdel = db_select('email_subscribe_users', 'u')
-      ->fields('u', array('sid'))
-      ->condition('status', 1)
-      ->condition(db_or()
-        ->condition('datechange', $changed, '<')
-        ->condition('datechange', NULL, 'IS NULL')
-      )
-      ->execute()
-      ->fetchAllAssoc('sid');
-      
-      if(sizeof($usdel) > 0){
-        $delRN = db_delete('email_subscribe_readed_nodes')
-        ->condition('rn_sid', array_keys($usdel), 'IN')
-        ->execute();
-        
-        /*$delUs = db_delete('email_subscribe_users')
-        ->condition('sid', array_keys($usdel), 'IN')
-        ->execute();
-        
-        drupal_set_message(format_plural($delRN, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with unconfirmed email, from %table table.', array('%table'=>'email_subscribe_readed_nodes')), 'warning');
-        //~ drupal_set_message(format_plural($delUs, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with unconfirmed email, from %table table.', array('%table'=>'email_subscribe_users')), 'warning');
-      }
-    }*/
     
     db_query('OPTIMIZE TABLE {email_subscribe_readed_nodes}');
     drupal_set_message(format_plural($sql, 'Was removed 1 row.', 'Was removed @count rows.'), 'warning');
