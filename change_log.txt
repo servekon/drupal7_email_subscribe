@@ -1,5 +1,8 @@
 Foreword. Sorry for translate via Google Translate.
 
+Version 1.0.5.2
+-Discard fill the readed nodes table when node insert for user with not confirmed emails
+
 Version 1.0.5.1
 -Filling 'email_subscribe_readed_nodes' allocated in a separate function. 
  Fixed error when user confirm email(the variable $new was not defined, bug from version 1.0.5);

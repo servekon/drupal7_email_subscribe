@@ -227,3 +227,25 @@ function email_subscribe_update_7104(){
   ->condition('rn_sid', 0)
   ->execute();
 }
+
+/**
+ * Delete records for users with not confirmed email from the {email_subscribe_readed_nodes} table.
+ * Version 1.0.5.2
+ */
+function email_subscribe_update_7105(){
+  $usdel = db_select('email_subscribe_users', 'u')
+  ->fields('u', array('sid'))
+  ->condition('status', 1)
+  ->execute()
+  ->fetchAllAssoc('sid');
+
+  if(sizeof($usdel) > 0){
+    $delRN = db_delete('email_subscribe_readed_nodes')
+    ->condition('rn_sid', array_keys($usdel), 'IN')
+    ->execute();
+    
+    db_query('OPTIMIZE TABLE {email_subscribe_readed_nodes}');
+    
+    drupal_set_message(format_plural($delRN, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with not confirmed email, from %table table.', array('%table'=>'email_subscribe_readed_nodes')), 'warning');
+  }
+}
