@@ -50,10 +50,21 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#required' => TRUE,
     '#weight' => 3,
   );
+  
+  $form['email_subscribe_node_views_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Type of node display for message body'),
+    '#description' => t('You must configure the view type on the display control page of each type of material. Example link for "page" node type').': '.l(t('manage display'), 'admin/structure/types/manage/page/display'),
+    '#options' => _email_subcribe_get_list_node_view_types(),
+    '#default_value' => (int)variable_get('email_subscribe_node_views_type', 1),
+    '#required' => TRUE,
+    '#weight' => 4,
+  );
+  
   $form['email_subscribe_interval']= array(
     '#type' => 'select',
     '#title' => t('Interval'),
-    '#weight' => 4,
+    '#weight' => 5,
     '#options' => array(
       '3600' => format_plural(1, 'Every 1 hour', 'Every @count hours'),
       '7200' => format_plural(2, 'Every 1 hour', 'Every @count hours'),
@@ -74,10 +85,11 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#required' => TRUE,
     '#default_value' => variable_get('email_subscribe_interval', 3600),
   );
+  
   $form['email_subscribe_limit']= array(
     '#type' => 'select',
     '#title' => t('Limit for emails per one crons run'),
-    '#weight' => 5,
+    '#weight' => 6,
     '#options' => $limits,
     '#required' => TRUE,
     '#default_value' => variable_get('email_subscribe_limit', 15),
@@ -770,10 +782,10 @@ function email_subscribe_clean_database_form($form=array(), &$form_state){
     '#default_value' => 1,
   );
   
-  /*$form['es_del_not_confimed'] = array(
+  $form['es_del_not_confimed'] = array(
     '#type' => 'checkbox',
     '#title' => t('Remove users with unconfirmed emails'),
-  );*/
+  );
   
   $form['submit'] = array(
     '#type' => 'submit',
@@ -829,7 +841,7 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
     )->rowCount();
     
     //~ Delete data for users with uconfirmed emails
-    /*if($es_del_not_confimed){
+    if($es_del_not_confimed){
       $usdel = db_select('email_subscribe_users', 'u')
       ->fields('u', array('sid'))
       ->condition('status', 1)
@@ -845,14 +857,14 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
         ->condition('rn_sid', array_keys($usdel), 'IN')
         ->execute();
         
-        /*$delUs = db_delete('email_subscribe_users')
+        $delUs = db_delete('email_subscribe_users')
         ->condition('sid', array_keys($usdel), 'IN')
         ->execute();
         
         drupal_set_message(format_plural($delRN, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with unconfirmed email, from %table table.', array('%table'=>'email_subscribe_readed_nodes')), 'warning');
-        //~ drupal_set_message(format_plural($delUs, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with unconfirmed email, from %table table.', array('%table'=>'email_subscribe_users')), 'warning');
+        drupal_set_message(format_plural($delUs, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with unconfirmed email, from %table table.', array('%table'=>'email_subscribe_users')), 'warning');
       }
-    }*/
+    }
     
     db_query('OPTIMIZE TABLE {email_subscribe_readed_nodes}');
     drupal_set_message(format_plural($sql, 'Was removed 1 row.', 'Was removed @count rows.'), 'warning');

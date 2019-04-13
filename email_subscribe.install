@@ -249,3 +249,14 @@ function email_subscribe_update_7105(){
     drupal_set_message(format_plural($delRN, 'Was removed 1 row.', 'Was removed @count rows.').' '.t('For users with not confirmed email, from %table table.', array('%table'=>'email_subscribe_readed_nodes')), 'warning');
   }
 }
+
+/**
+ * Version 1.0.7
+ */
+function email_subscribe_update_7106(){
+  if (module_exists('locale')) {
+    locale_system_update(array('email_subscribe'));
+  }
+  
+  drupal_set_message(t('You must configure the view type on the display control page of each type of material. Example link for "page" node type').': '.l(t('manage display'), 'admin/structure/types/manage/page/display'), 'warning');
+}

@@ -1,5 +1,9 @@
 Foreword. Sorry for translate via Google Translate.
 
+Version 1.0.7
+-Added node view mode 'email_subscribe';
+-Message body avaliable configure on page of manage display node type;
+
 Version 1.0.5.2
 -Discard fill the readed nodes table when node insert for user with not confirmed emails
 
