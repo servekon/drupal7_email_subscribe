@@ -5,7 +5,7 @@
  * */
 function email_subscribe_settings_form($form=array(), &$form_state){
   $limits = array();
-  for($i=15; $i<=100; $i+=5){
+  for($i=50; $i<=1000; $i+=25){
     $limits[$i] = $i;
   }
   

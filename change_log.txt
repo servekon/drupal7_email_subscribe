@@ -1,5 +1,8 @@
 Foreword. Sorry for translate via Google Translate.
 
+Version 1.0.7.1
+-Fixed template of message body for correct display few nodes in single email;
+
 Version 1.0.7
 -Added node view mode 'email_subscribe';
 -Message body avaliable configure on page of manage display node type;
