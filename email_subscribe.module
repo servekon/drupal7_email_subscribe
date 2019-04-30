@@ -307,7 +307,7 @@ function email_subscribe_cron() {
 }
 
 function _email_subcribe_preview_letter($values){
-  global $base_url;
+  global $base_url, $base_path;
   $isGorup = (bool)$values['email_subscribe_group_nodes'];
   $out = '<div class="es-preview">';
   $viewTypesArr = _email_subcribe_get_list_node_view_types();
@@ -352,6 +352,7 @@ function _email_subcribe_preview_letter($values){
     $teaser = drupal_render($build);
     
     $teaser = mb_ereg_replace('src="/', 'src="'.$base_url.'/', $teaser);
+    $teaser = mb_ereg_replace('href="'.$base_path, 'href="'.$base_url.'/', $teaser);
     
     $node_url = url('node/'.$node->nid, array('absolute'=>TRUE));
     $title = $node->title;
@@ -396,7 +397,7 @@ function email_subscribe_cron_queue_info() {
  * Send email and set node is readed.
  * */
 function _email_subscribe_send_by_cron($item){
-  global $base_url;
+  global $base_url, $base_path;
   $item = (object)$item;
   $msg = array();
   $isClean = (bool)variable_get('email_subscribe_dont_store_info_sent_emails', 0);
@@ -422,6 +423,7 @@ function _email_subscribe_send_by_cron($item){
       $teaser .= drupal_render($build);
       
       $teaser = mb_ereg_replace('src="/', 'src="'.$base_url.'/', $teaser);
+      $teaser = mb_ereg_replace('href="'.$base_path, 'href="'.$base_url.'/', $teaser);
       
       $teaser .= '</div>';
       
