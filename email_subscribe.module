@@ -2,7 +2,7 @@
 /**
  * Implementation of hook_permission
  * */
-function email_subscribe_permission(){
+function email_subscribe_permission() {
   return array(
     'access email_subscribe' => array(
       'title' => t('Allow subscribe/unsubscribe'),
@@ -206,7 +206,7 @@ function email_subscribe_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_block_info().
  */
-function email_subscribe_block_info(){
+function email_subscribe_block_info() {
   $blocks['email_subs_subscribe_block'] = array(
     'info' => t('Subscribe by email'),
     'status' => FALSE,
@@ -219,9 +219,9 @@ function email_subscribe_block_info(){
 /**
  * Implements hook_block_configure().
  */
-function email_subscribe_block_configure($delta=''){
+function email_subscribe_block_configure($delta='') {
   $form = array();
-  if($delta == 'email_subs_subscribe_block'){
+  if($delta == 'email_subs_subscribe_block') {
     $default_values = variable_get('email_subscribe_allowed_node_types', array('page'));
     $form['email_subscribe_allowed_node_types'] = array(
       '#type' => 'checkboxes',
@@ -252,7 +252,7 @@ function email_subscribe_block_save($delta = '', $edit = array()) {
  */
 function email_subscribe_block_view($delta = '') {
   module_load_include('inc', 'email_subscribe', 'email_subscribe.user');
-  if($delta == 'email_subs_subscribe_block'){
+  if($delta == 'email_subs_subscribe_block') {
     $block['subject'] = t('Subscribe to new posts');
     $block['content'] = drupal_get_form('email_subscribe_subscribe_form');
   }
@@ -280,23 +280,35 @@ function email_subscribe_cron() {
     ->condition('n.status', NODE_PUBLISHED)
     ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
     ->orderBy('n.nid, rn.rn_sid', 'ASC');
-    if(!$isGorup){
+    if(!$isGorup) {
       $rnodes->range(0, $limit);
     }
     $res = $rnodes->execute();
     
     //~ Alternative method for GROUP_CONCAT of MySql. Need for support for all database engines.
-    foreach($res as $val){
+    foreach($res as $val) {
       $arrRes[$val->rn_sid]['email'] = $val->email;
       $arrRes[$val->rn_sid]['rn_id'][] = $val->rn_id;
       $arrRes[$val->rn_sid]['rn_nid'][] = $val->rn_nid;
     }
     //~ Limiting of array when grouping nodes
-    if($isGorup){
+    if($isGorup) {
       $arrRes = array_slice($arrRes, 0, $limit, TRUE);
     }
     
-    if(sizeof($arrRes) > 0 && !empty(current($arrRes))){
+    if(sizeof($arrRes) > 0 && !empty(current($arrRes))) {
+      $count = db_select('queue', 'q')
+      ->condition('q.name', 'email_subscribe')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+      
+      if($count > ($limit / 2)) {
+        db_delete('queue')
+        ->condition('name', 'email_subscribe')
+        ->execute();
+      }
+      
       $queue = DrupalQueue::get('email_subscribe');
       foreach($arrRes as $item) {
         $queue->createItem($item);
@@ -306,7 +318,7 @@ function email_subscribe_cron() {
   }
 }
 
-function _email_subcribe_preview_letter($values){
+function _email_subcribe_preview_letter($values) {
   global $base_url, $base_path;
   $isGorup = (bool)$values['email_subscribe_group_nodes'];
   $out = '<div class="es-preview">';
@@ -324,24 +336,24 @@ function _email_subcribe_preview_letter($values){
 
   $nodes = node_load_multiple(array_keys($nids));
 
-  if($isGorup){
+  if($isGorup) {
     $header = $values['email_subscribe_new_content_header'];
-    if(is_array($header)){
+    if(is_array($header)) {
       $header=$header['value'];
     }
     $out .= $header;
   }
   
   $body = $values['email_subscribe_new_content_body'];
-  if(is_array($body)){
+  if(is_array($body)) {
     $body=$body['value'];
   }
   $marginBot = 0;
-  if(sizeof($nodes) >= 2){
+  if(sizeof($nodes) >= 2) {
     $marginBot = 25;
   }
   
-  foreach($nodes as $node){
+  foreach($nodes as $node) {
     $nodeBody = '<div style="display: table; margin-bottom: '.$marginBot.'px">';
     
     $build = node_view($node, $viewType);
@@ -366,9 +378,9 @@ function _email_subcribe_preview_letter($values){
     $out .= $nodeBody;
   }
 
-  if($isGorup){
+  if($isGorup) {
     $footer = $values['email_subscribe_new_content_footer'];
-    if(is_array($footer)){
+    if(is_array($footer)) {
       $footer=$footer['value'];
     }
     $out .= $footer;
@@ -396,7 +408,7 @@ function email_subscribe_cron_queue_info() {
 /**
  * Send email and set node is readed.
  * */
-function _email_subscribe_send_by_cron($item){
+function _email_subscribe_send_by_cron($item) {
   global $base_url, $base_path;
   $item = (object)$item;
   $msg = array();
@@ -406,14 +418,17 @@ function _email_subscribe_send_by_cron($item){
   $viewType = $viewTypesArr[$viewType];
   $marginBot = 0;
   
+  $lang = language_default();
+  $lang = $lang->language;
+  
   try{
     $nodes = node_load_multiple($item->rn_nid);
     
-    if(sizeof($nodes) >= 2){
+    if(sizeof($nodes) >= 2) {
       $marginBot = 25;
     }
     
-    foreach($nodes as $node){
+    foreach($nodes as $node) {
       $teaser = '<div style="display: table; margin-bottom: '.$marginBot.'px">';
       $build = node_view($node, $viewType);
       unset($build['#theme']);
@@ -428,12 +443,17 @@ function _email_subscribe_send_by_cron($item){
       $teaser .= '</div>';
       
       $msg['teaser'][] = $teaser;
-      $msg['node_url'][] = url('node/'.$node->nid, array('absolute'=>TRUE, 'query' => array('utm_source' => 'newsletter', 'utm_medium' => 'email')));
+      $msg['node_url'][] = url('node/'.$node->nid, array(
+          'absolute' => TRUE,
+          'query' => array('utm_source' => 'newsletter', 'utm_medium' => 'email'),
+          'language' => $lang,
+        )
+      );
       $msg['title'][] = $node->title;
     }
     
-    if(email_subcribe_send_email_letter($item->email, 0, $msg)){
-      if(!$isClean){
+    if(email_subcribe_send_email_letter($item->email, 0, $msg)) {
+      if(!$isClean) {
         db_update('email_subscribe_readed_nodes')->fields(array('rn_status'=>1, 'datechange'=>REQUEST_TIME))
         ->condition('rn_id', $item->rn_id, 'IN')->execute();
       }
@@ -443,7 +463,7 @@ function _email_subscribe_send_by_cron($item){
       }
     }
   }
-  catch(Exception $e){
+  catch(Exception $e) {
     watchdog_exception('email-subscribe-error', $e);
     drupal_set_message(t('Error'), 'error');
   }
@@ -454,13 +474,13 @@ function _email_subscribe_send_by_cron($item){
  */
 function email_subscribe_node_insert($node) {
   try{
-    if(in_array((string)$node->type, array_values(_email_subcribe_get_list_node_types()), true)){
+    if(in_array((string)$node->type, array_values(_email_subcribe_get_list_node_types()), true)) {
       $values = array();
       $users = db_select('email_subscribe_users', 'u')
       ->fields('u', array('sid'))
       ->condition('status', array(2), 'IN')
       ->execute();
-      foreach($users as $val){
+      foreach($users as $val) {
         $values[] = array(
           'rn_nid' => $node->nid,
           'rn_sid' => (int)$val->sid,
@@ -473,13 +493,13 @@ function email_subscribe_node_insert($node) {
         $query->values($record);
       }
       $res = $query->execute();
-      if($res){
+      if($res) {
         drupal_set_message(t('Material added to the distribution list.'));
         watchdog('email-subscribe-info', 'Node with ID %node added to the distribution list', array('%node' => $node->nid));
       }
     }
   }
-  catch(Exception $e){
+  catch(Exception $e) {
     watchdog_exception('email-subscribe-error', $e);
     drupal_set_message(t('Error'), 'error');
   }
@@ -493,7 +513,7 @@ function email_subscribe_mail($key, &$message, $params) {
   
   $lang = language_default();
   
-  if(isset($user->language)){
+  if(isset($user->language)) {
     $lang = $user->language;
   }
   else{
@@ -539,7 +559,7 @@ function email_subscribe_mail($key, &$message, $params) {
 /**
  * Send email
  * */
-function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
+function email_subcribe_send_email_letter($to, $type=1, $msg=array()) {
   $arrKeys = array('new_content_message', 'confirm_message', 'unsubscribe_message', 'resubscribe_message');
   $arrBody = array('email_subscribe_new_content_body', 'email_subscribe_confirm_body', 'email_unsubscribe_confirm_body', 'email_resubscribe_confirm_body');
   $arrUrl = array('email-unsubscribe', 'email-subscribe-confirm-email', 'email-unsubscribe', 'email-resubscribe');
@@ -550,13 +570,13 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
   $params = array();
   $nodeBody = $fewBody ='';
   $isAdmin = user_access('administer email_subscribe');
-  if(!empty($from)){
+  if(!empty($from)) {
     $body = variable_get($arrBody[$type], '');
-    if(is_array($body)){
+    if(is_array($body)) {
       $body=$body['value'];
     }
-    if(!empty($to) and !empty($body)){
-      switch($type){
+    if(!empty($to) and !empty($body)) {
+      switch($type) {
         case 0: case 2:
           $token = email_subscribe_generate_token($to,1);
         break;
@@ -567,24 +587,24 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
       $url = url($arrUrl[$type].'/token/'.$token, array('absolute'=>TRUE));
       $body = preg_replace('/\[url\]/i', $url, $body);
       //~ New content email
-      if(empty($type)){
-        if($isGorup){
+      if(empty($type)) {
+        if($isGorup) {
           $header = variable_get('email_subscribe_new_content_header');
-          if(is_array($header)){
+          if(is_array($header)) {
             $header=$header['value'];
           }
           $header = preg_replace('/\[url\]/i', $url, $header);
           $fewBody .= $header;
         }
-        foreach($msg['node_url'] as $key=>$val){
+        foreach($msg['node_url'] as $key=>$val) {
           $nodeBody = preg_replace('/\[node_url\]/i', $val, $body);
           $nodeBody = preg_replace('/\[title\]/i', $msg['title'][$key], $nodeBody);
           $nodeBody = preg_replace('/\[teaser\]/i', $msg['teaser'][$key], $nodeBody);
           $fewBody .= $nodeBody;
         }
-        if($isGorup){
+        if($isGorup) {
           $footer = variable_get('email_subscribe_new_content_footer');
-          if(is_array($footer)){
+          if(is_array($footer)) {
             $footer=$footer['value'];
           }
           $footer = preg_replace('/\[url\]/i', $url, $footer);
@@ -600,32 +620,32 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
 
       $result = drupal_mail('email_subscribe', $arrKeys[$type], $to, $language, $params, $from, $send);
       if ($result['result'] == TRUE) {
-        if(!empty($type)){
+        if(!empty($type)) {
           drupal_set_message(t('In your e-mail address sent an email with further instructions.'), 'status', FALSE);
         }
         else{
           drupal_set_message(t('Subscribe email successful.'), 'status', FALSE);
         }
         //~ Send notification to the site admin
-        if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0 and $type > 0){
-          $admEmail = variable_get('site_mail');
-          $params['message'] = t("To email '@email' action was performed '@type'.", array('@email'=>$to, '@type'=>t((string)$arrAdm[$type])));
+        if(variable_get('email_subscribe_send_notification_to_admin', 0) > 0 and $type > 0) {
+          $admEmail = variable_get('email_subscribe_notification_email', variable_get('site_mail'));
+          $params['message'] = t('To email "@email" action was performed "@type".', array('@email'=>$to, '@type'=>t((string)$arrAdm[$type])));
           $toAdmin = drupal_mail('email_subscribe', 'admin_notice', $admEmail, $language, $params, $from, $send);
-          if($toAdmin['result'] == TRUE and $isAdmin){
+          if($toAdmin['result'] == TRUE and $isAdmin) {
             drupal_set_message(t('Notification to the site administrator has been sent.'), 'status', FALSE);
           }
-          elseif($toAdmin['result'] == FALSE and $isAdmin){
+          elseif($toAdmin['result'] == FALSE and $isAdmin) {
             drupal_set_message(t('Notification to the site administrator has been NOT sent.'), 'warning', FALSE);
           }
         }
       }
       else {
         drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error', FALSE);
-        if(empty($type)){
+        if(empty($type)) {
           return false;
         }
       }
-      if(!empty($type)){
+      if(!empty($type)) {
         drupal_goto();
       }
       return true;
@@ -637,13 +657,13 @@ function email_subcribe_send_email_letter($to, $type=1, $msg=array()){
 /**
  * Get/set subscribe/unsubscribe tokens
  * */
-function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
+function email_subscribe_generate_token($email='', $type=0, $db=TRUE) {
   $ip   = explode('.', $_SERVER['REMOTE_ADDR']);
   $suff   = ((int)$ip[0]+(int)end($ip))+(rand(155,775));
   $uuid   = uniqid();
   $token  = md5($suff.$uuid);
   
-  if($db){
+  if($db) {
     try{
       $arrFields = array('subs_token','unsubs_token');
       db_update('email_subscribe_users')
@@ -651,7 +671,7 @@ function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
       ->condition('email', check_plain($email))
       ->execute();
     }
-    catch(Exception $e){
+    catch(Exception $e) {
       watchdog_exception('email-subscribe-error', $e);
       drupal_set_message('Error'); return false;
     }
@@ -662,7 +682,7 @@ function email_subscribe_generate_token($email='', $type=0, $db=TRUE){
 /**
  * Get list of types articles for the email sending
  * */
-function _email_subcribe_get_list_node_types(){
+function _email_subcribe_get_list_node_types() {
   $node_types = variable_get('email_subscribe_allowed_node_types', array('page'));
   return array_filter($node_types);
 }
@@ -670,7 +690,7 @@ function _email_subcribe_get_list_node_types(){
 /**
  * Get list of node view types
  * */
-function _email_subcribe_get_list_node_view_types(){
+function _email_subcribe_get_list_node_view_types() {
   return array(
     1 => 'rss',
     2 => 'teaser',

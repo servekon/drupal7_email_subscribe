@@ -1,5 +1,8 @@
 Foreword. Sorry for translate via Google Translate.
 
+Version 1.0.7.2
+-Fixed datetime field format for PostgreSQL;
+
 Version 1.0.7.1
 -Fixed template of message body for correct display few nodes in single email;
 -Fixed url paths in message body;

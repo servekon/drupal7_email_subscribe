@@ -3,9 +3,9 @@
 /**
  * Settings form
  * */
-function email_subscribe_settings_form($form=array(), &$form_state){
+function email_subscribe_settings_form($form=array(), &$form_state) {
   $limits = array();
-  for($i=50; $i<=1000; $i+=25){
+  for($i=50; $i<=1000; $i+=25) {
     $limits[$i] = $i;
   }
   
@@ -15,7 +15,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     ),
   );
   
-  if(isset($form_state['preview_html'])){
+  if(isset($form_state['preview_html'])) {
     $form['#prefix'] = $form_state['preview_html'];
   }
   
@@ -26,11 +26,18 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#required' => TRUE,
     '#default_value' => variable_get('email_subscribe_from_email', ''),
   );
+  $form['email_subscribe_notification_email']= array(
+    '#type' => 'textfield',
+    '#title' => t('Receive e-mail notifications'),
+    '#weight' => 1,
+    '#required' => TRUE,
+    '#default_value' => variable_get('email_subscribe_notification_email', ''),
+  );
   $form['email_subscribe_send_notification_to_admin'] = array(
     '#type' => 'checkbox',
     '#title' => t('Notify the site administrator of any changes in the subscription'),
     '#default_value' => variable_get('email_subscribe_send_notification_to_admin', 0),
-    '#weight' => 1,
+    '#weight' => 2,
   );
   
   $form['email_subscribe_dont_store_info_sent_emails'] = array(
@@ -38,7 +45,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#title' => t('Do not store the information about sent emails'),
     '#description' => t('If checked, after send emails stored data will be removed'),
     '#default_value' => variable_get('email_subscribe_dont_store_info_sent_emails', 0),
-    '#weight' => 2,
+    '#weight' => 3,
   );
   
   $default_values = variable_get('email_subscribe_allowed_node_types', array('page'));
@@ -48,7 +55,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#options' => node_type_get_names(),
     '#default_value' => $default_values,
     '#required' => TRUE,
-    '#weight' => 3,
+    '#weight' => 4,
   );
   
   $form['email_subscribe_node_views_type'] = array(
@@ -58,14 +65,15 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#options' => _email_subcribe_get_list_node_view_types(),
     '#default_value' => (int)variable_get('email_subscribe_node_views_type', 1),
     '#required' => TRUE,
-    '#weight' => 4,
+    '#weight' => 5,
   );
   
   $form['email_subscribe_interval']= array(
     '#type' => 'select',
     '#title' => t('Interval'),
-    '#weight' => 5,
+    '#weight' => 6,
     '#options' => array(
+      '1800' => format_plural(0.5, 'Every 1 hour', 'Every @count hours'),
       '3600' => format_plural(1, 'Every 1 hour', 'Every @count hours'),
       '7200' => format_plural(2, 'Every 1 hour', 'Every @count hours'),
       '10800' => format_plural(3, 'Every 1 hour', 'Every @count hours'),
@@ -89,7 +97,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   $form['email_subscribe_limit']= array(
     '#type' => 'select',
     '#title' => t('Limit for emails per one crons run'),
-    '#weight' => 6,
+    '#weight' => 7,
     '#options' => $limits,
     '#required' => TRUE,
     '#default_value' => variable_get('email_subscribe_limit', 15),
@@ -101,12 +109,12 @@ function email_subscribe_settings_form($form=array(), &$form_state){
     '#options' => array(t('No'), t('Yes')),
     '#description' => t('If you select "Yes" then all available the published nodes at the time of sending letter will be sent in the one letter.'),
     '#default_value' => variable_get('email_subscribe_group_nodes', 0),
-    '#weight' => 7,
+    '#weight' => 8,
   );
   
   $form['group_settings'] = array(
     '#type' => 'vertical_tabs',
-    '#weight' => 8,
+    '#weight' => 9,
   );
   //~ Confirm subscribe email
   $form['new_content_settings'] = array(
@@ -130,7 +138,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   
   $value=variable_get('email_subscribe_new_content_header');
   
-  if(is_array($value)){
+  if(is_array($value)) {
     $value=$value['value'];
   }
   //~ Fix incorrect visible state for text_format. From https://www.drupal.org/node/997826#comment-9119483
@@ -166,7 +174,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   
   $value=variable_get('email_subscribe_new_content_body');
   
-  if(is_array($value)){
+  if(is_array($value)) {
     $value=$value['value'];
   }
     
@@ -179,7 +187,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   
   $value=variable_get('email_subscribe_new_content_footer');
   
-  if(is_array($value)){
+  if(is_array($value)) {
     $value=$value['value'];
   }
   //~ Fix incorrect visible state for text_format. From https://www.drupal.org/node/997826#comment-9119483
@@ -213,7 +221,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   
   $value=variable_get('email_subscribe_confirm_body');
   
-  if(is_array($value)){
+  if(is_array($value)) {
     $value=$value['value'];
   }
   
@@ -241,7 +249,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   
   $value=variable_get('email_unsubscribe_confirm_body');
   
-  if(is_array($value)){
+  if(is_array($value)) {
     $value=$value['value'];
   }
   
@@ -268,7 +276,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   
   $value=variable_get('email_resubscribe_confirm_body');
   
-  if(is_array($value)){
+  if(is_array($value)) {
     $value=$value['value'];
   }
   
@@ -294,7 +302,7 @@ function email_subscribe_settings_form($form=array(), &$form_state){
   return system_settings_form($form);
 }
 
-function _email_subscribe_settings_form_preview_submit($form, &$form_state){
+function _email_subscribe_settings_form_preview_submit($form, &$form_state) {
   $html = _email_subcribe_preview_letter($form_state['values']);
   $form_state['preview_html'] = $html;
   $form_state['rebuild'] = TRUE;
@@ -312,7 +320,7 @@ function email_subscribe_settings_form_validate($form, &$form_state) {
 /**
  * List subscrobed users
  * */
-function email_subscribe_list_users_form($form = array(), &$form_state){
+function email_subscribe_list_users_form($form = array(), &$form_state) {
   global $user;
   $attrLinks  = array('html'=>true, 'attributes'=>array('style'=>'vertical-align:top'));
   $arrStat = array(
@@ -325,7 +333,7 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
   $collapsed = true;
   $argType = (int)arg(5);
   
-  if(($argType > 0 and $argType < 5) OR ($argType == 5 and !empty($arg))){
+  if(($argType > 0 and $argType < 5) OR ($argType == 5 and !empty($arg))) {
     $collapsed = false;
   }
   
@@ -384,7 +392,7 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
     array('data' => t('Actions')),
   );
   
-  foreach($headArr as $hval){
+  foreach($headArr as $hval) {
     $header[] = $hval;
   }
   unset($hval);
@@ -397,8 +405,8 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
     
     $query->fields('u', array('sid', 'email', 'status', 'subs_token', 'unsubs_token', 'date_subscribe', 'date_unsubscribe', 'date_resubscribe', 'uid'));
   
-    if(!empty($argType)){
-      switch($argType){
+    if(!empty($argType)) {
+      switch($argType) {
         case 5: default:
           $query->condition('email', '%'.db_like($arg).'%', 'LIKE');
         break;
@@ -413,18 +421,18 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
     $query->orderByHeader($header)->limit(50);
     $result = $query->execute();
   }
-  catch(Exception $e){
+  catch(Exception $e) {
     watchdog_exception('email-subscribe-error', $e);
     drupal_set_message('Error. More information in '.l('syslog','admin/reports/dblog').'.<br />'.check_plain($e->getMessage()), 'error', FALSE);
     return $form;
   }
   $noBalans = 0;
-  foreach($result as $key=>$val){
+  foreach($result as $key=>$val) {
     $val->actions = '';
     _email_subscribe_format_date($val->date_subscribe);
     _email_subscribe_format_date($val->date_unsubscribe);
     _email_subscribe_format_date($val->date_resubscribe);
-    switch($val->status){
+    switch($val->status) {
       case 1: default:
         $val->actions = l(t('Confirm'), 'admin/config/services/email_subscribe/confirm/'.$val->sid, $attrLinks);
       break;
@@ -436,17 +444,17 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
       break;
     }
     
-    if(!empty($val->actions)){
+    if(!empty($val->actions)) {
       $val->actions .= '<br />'.l(t('Remove'), 'admin/config/services/email_subscribe/remove/'.$val->sid, $attrLinks); 
     }
     
-    if($val->uid === $user->uid){
+    if($val->uid === $user->uid) {
       $val->uid = t('I am');
     }
-    elseif($val->uid == 0){
+    elseif($val->uid == 0) {
       $val->uid = t('Anonymous');
     }
-    elseif($val->uid > 0){
+    elseif($val->uid > 0) {
       $userObj = user_load($val->uid);
       $val->uid = l($userObj->name, 'user/'.$val->uid.'/edit');
     }
@@ -471,25 +479,25 @@ function email_subscribe_list_users_form($form = array(), &$form_state){
   return $form;
 }
 
-function email_subscribe_list_users_form_submit($form, &$form_state){
+function email_subscribe_list_users_form_submit($form, &$form_state) {
   $filter_type = $filter_text = '';
   unset($form_state['input']['op'], $form_state['input']['form_id']);
   unset($form_state['input']['form_build_id'],$form_state['input']['form_token']);
   
   extract($form_state['input']);
-  drupal_goto("admin/config/services/email_subscribe/filter/".$filter_type."/".$filter_text);
+  drupal_goto('admin/config/services/email_subscribe/filter/'.$filter_type.'/'.$filter_text);
 }
 
-function _email_subscribe_format_date(&$val){
-  if($val !== Null){
+function _email_subscribe_format_date(&$val) {
+  if($val !== Null) {
     $val  = format_date(strtotime($val), 'short');
   }
   return true;
 }
 
-function _email_subscribe_confirmemail_by_admin($sid=0){
+function _email_subscribe_confirmemail_by_admin($sid=0) {
   global $user;
-  if(!empty($sid)){
+  if(!empty($sid)) {
     try{
       $tokenUns = email_subscribe_generate_token('',1,FALSE);
       $res = db_update('email_subscribe_users')
@@ -497,7 +505,7 @@ function _email_subscribe_confirmemail_by_admin($sid=0){
       ->condition('status', 1)
       ->condition('sid', (int)$sid)
       ->execute();
-      if(!empty($res)){
+      if(!empty($res)) {
         drupal_set_message('Email confirmed.');
       }
       else{
@@ -505,7 +513,7 @@ function _email_subscribe_confirmemail_by_admin($sid=0){
       }
       drupal_goto('admin/config/services/email_subscribe');
     }
-    catch(Exception $e){
+    catch(Exception $e) {
       watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
@@ -513,20 +521,20 @@ function _email_subscribe_confirmemail_by_admin($sid=0){
   return '';
 }
 
-function _email_subscribe_unsubscribe_by_admin($sid=0){
+function _email_subscribe_unsubscribe_by_admin($sid=0) {
   global $user;
-  if(!empty($sid)){
+  if(!empty($sid)) {
     try{
       $res = db_update('email_subscribe_users')
       ->fields(array('status' => 3, 'uid'=>$user->uid, 'date_unsubscribe' => date('Y-m-d H:i:s')))
       ->condition('status', 2)
       ->condition('sid', (int)$sid)
       ->execute();
-      if(!empty($res)){
+      if(!empty($res)) {
         $del = db_delete('email_subscribe_readed_nodes')
         ->condition('rn_sid', (int)$sid)
         ->execute();
-        if((bool)$del){
+        if((bool)$del) {
           drupal_set_message(t('Email unsubscribed.'));
         }
       }
@@ -535,7 +543,7 @@ function _email_subscribe_unsubscribe_by_admin($sid=0){
       }
       drupal_goto('admin/config/services/email_subscribe');
     }
-    catch(Exception $e){
+    catch(Exception $e) {
       watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return false;
     }
@@ -543,22 +551,22 @@ function _email_subscribe_unsubscribe_by_admin($sid=0){
   return '';
 }
 
-function _email_subscribe_resubscribe_by_admin($sid=0){
+function _email_subscribe_resubscribe_by_admin($sid=0) {
   global $user;
-  if(!empty($sid)){
+  if(!empty($sid)) {
     try{
       $res = db_update('email_subscribe_users')
       ->fields(array('status' => 2, 'uid'=>$user->uid, 'date_resubscribe' => date('Y-m-d H:i:s')))
       ->condition('status', 3)
       ->condition('sid', (int)$sid)
       ->execute();
-      if(!empty($res)){
+      if(!empty($res)) {
         $nids = db_select('node', 'n')
         ->fields('n', array('nid', 'status'))
         ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
         ->execute();
         
-        foreach($nids as $val){
+        foreach($nids as $val) {
           $values[] = array(
             'rn_nid' => $val->nid,
             'rn_sid' => (int)$sid,
@@ -578,7 +586,7 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
       }
       drupal_goto('admin/config/services/email_subscribe');
     }
-    catch(Exception $e){
+    catch(Exception $e) {
       watchdog_exception('email-subscribe-error', $e);
       drupal_set_message(t('Error'), 'error'); return '';
     }
@@ -586,12 +594,12 @@ function _email_subscribe_resubscribe_by_admin($sid=0){
   return '';
 }
 
-function _email_subscribe_remove_by_admin($sid=0){
+function _email_subscribe_remove_by_admin($sid=0) {
   $form = drupal_get_form('_email_subscribe_remove_by_admin_form', (int)$sid);
   return drupal_render($form);
 }
 
-function _email_subscribe_remove_by_admin_form($form, &$form_state, $sid){
+function _email_subscribe_remove_by_admin_form($form, &$form_state, $sid) {
   $form = array();
   
   $email = db_select('email_subscribe_users', 'u')
@@ -600,7 +608,7 @@ function _email_subscribe_remove_by_admin_form($form, &$form_state, $sid){
   ->range(0,1)
   ->execute()->fetchObject();
   
-  if(empty($email->email)){
+  if(empty($email->email)) {
     drupal_set_message(t('No data.'), 'warning');
     drupal_goto('admin/config/services/email_subscribe');
   }
@@ -635,11 +643,11 @@ function _email_subscribe_remove_by_admin_form($form, &$form_state, $sid){
   return $form;
 }
 
-function _email_subscribe_remove_by_admin_form_submit($form, &$form_state){
+function _email_subscribe_remove_by_admin_form_submit($form, &$form_state) {
   $sid = (int)$form_state['values']['email_id'];
   $email = check_plain($form_state['values']['email']);
   $del = db_delete('email_subscribe_users')->condition('sid', $sid)->execute();
-  if($del){
+  if($del) {
     drupal_set_message(t('Email %email was removed.', array('%email'=>$email)));
   }
   else{
@@ -651,7 +659,7 @@ function _email_subscribe_remove_by_admin_form_submit($form, &$form_state){
 /**
  * Bulk subscribe
  * */
-function email_subscribe_mass_subscribe_form($form=array(),&$form_state){
+function email_subscribe_mass_subscribe_form($form=array(),&$form_state) {
   $form['emails'] = array(
     '#type' => 'textarea',
     '#title' => t('Email addresses'),
@@ -671,24 +679,24 @@ function email_subscribe_mass_subscribe_form($form=array(),&$form_state){
  * "simplenews_subscription_list_add_submit" module SimpleNews.
  * Thanks to the developers of this module.
  * */
-function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
+function email_subscribe_mass_subscribe_form_submit($form, &$form_state) {
   global $user;
   $added = array();
   $invalid = array();
   $skipped = array();
   $values = array();
-  $emails = preg_split("/[\s,]+/", $form_state['values']['emails']);
+  $emails = preg_split('/[\s,]+/', $form_state['values']['emails']);
   
   $nids = db_select('node', 'n')
   ->fields('n', array('nid', 'status'))
   ->condition('type', _email_subcribe_get_list_node_types(), 'IN')
   ->execute()->fetchAllAssoc('nid');
-  for($i=0; $i<sizeof($emails); $i++){
+  for($i=0; $i<sizeof($emails); $i++) {
     $email = trim($emails[$i]);
-    if($email == ''){
+    if($email == '') {
       continue;
     }
-    if(valid_email_address($email)){
+    if(valid_email_address($email)) {
       $checkMail = db_select('email_subscribe_users', 'e')
       ->fields('e', array('status'))
       ->condition('email', check_plain($email))
@@ -697,7 +705,7 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
       ->execute()
       ->fetchObject();
       
-      if(!$checkMail){
+      if(!$checkMail) {
         $subsToken = email_subscribe_generate_token($email, 0, FALSE);
         $unsubsToken = email_subscribe_generate_token($email, 1, FALSE);
         $ins = db_insert('email_subscribe_users')->fields(array(
@@ -709,10 +717,10 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
           'date_subscribe' => date('Y-m-d H:i:s'),
         ));
         $newid = $ins->execute();
-        if($newid){
+        if($newid) {
           $query = db_insert('email_subscribe_readed_nodes')->fields(array('rn_nid', 'rn_sid', 'rn_status'));
           $values = array();
-          foreach($nids as $val){
+          foreach($nids as $val) {
             $values[] = array(
               'rn_nid' => $val->nid,
               'rn_sid' => (int)$newid,
@@ -720,7 +728,7 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
             );
           }
           unset($val);
-          foreach($values as $record){
+          foreach($values as $record) {
             $query->values($record);
           }
           unset($record);
@@ -736,21 +744,21 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
       $invalid[] = $email;
     }
   }
-  if($added){
-    $added = implode(", ", $added);
+  if($added) {
+    $added = implode(', ', $added);
     drupal_set_message(t('The following addresses were added: %added.', array('%added' => $added)));
   }
   else{
     drupal_set_message(t('No addresses were added.'));
   }
   
-  if($invalid){
-    $invalid = implode(", ", $invalid);
+  if($invalid) {
+    $invalid = implode(', ', $invalid);
     drupal_set_message(t('The following addresses were invalid: %invalid.', array('%invalid' => $invalid)), 'error');
   }
   
-  if($skipped){
-    $skipped = implode(", ", $skipped);
+  if($skipped) {
+    $skipped = implode(', ', $skipped);
     drupal_set_message(t('The following addresses were skipped: %skipped.', array('%skipped' => $skipped)), 'warning');
   }
 }
@@ -758,14 +766,14 @@ function email_subscribe_mass_subscribe_form_submit($form, &$form_state){
 /**
  * email_subscribe_clean_database_form
  * */
-function email_subscribe_clean_database_form($form=array(), &$form_state){
+function email_subscribe_clean_database_form($form=array(), &$form_state) {
   
   $options = array(
-    1 => format_plural(12, "Remove data older then 1 month", "Remove data older then @count months"),
-    2 => format_plural(6, "Remove data older then 1 month", "Remove data older then @count months"),
-    3 => format_plural(3, "Remove data older then 1 month", "Remove data older then @count months"),
-    4 => format_plural(1, "Remove data older then 1 month", "Remove data older then @count months"),
-    5 => t("Remove all data"),
+    1 => format_plural(12, 'Remove data older then 1 month', 'Remove data older then @count months'),
+    2 => format_plural(6, 'Remove data older then 1 month', 'Remove data older then @count months'),
+    3 => format_plural(3, 'Remove data older then 1 month', 'Remove data older then @count months'),
+    4 => format_plural(1, 'Remove data older then 1 month', 'Remove data older then @count months'),
+    5 => t('Remove all data'),
   );
   
   $form['es_yes'] = array(
@@ -779,12 +787,13 @@ function email_subscribe_clean_database_form($form=array(), &$form_state){
     '#type' => 'radios',
     '#title' => t('Type of removing'),
     '#options' => $options,
-    '#default_value' => 1,
+    '#default_value' => 4,
   );
   
   $form['es_del_not_confimed'] = array(
     '#type' => 'checkbox',
     '#title' => t('Remove users with unconfirmed emails'),
+    '#default_value' => 1,
   );
   
   $form['submit'] = array(
@@ -801,23 +810,23 @@ function email_subscribe_clean_database_form($form=array(), &$form_state){
   return $form;
 }
 
-function email_subscribe_clean_database_form_submit($form, &$form_state){
+function email_subscribe_clean_database_form_submit($form, &$form_state) {
   form_state_values_clean($form_state);
   extract($form_state['values']);
   $changed = 0;
   
-  switch($es_options){
+  switch($es_options) {
     case 1:
-      $changed = strtotime("-12 Month", REQUEST_TIME);
+      $changed = strtotime('-12 Month', REQUEST_TIME);
     break;
     case 2:
-      $changed = strtotime("-6 Month", REQUEST_TIME);
+      $changed = strtotime('-6 Month', REQUEST_TIME);
     break;
     case 3:
-      $changed = strtotime("-3 Month", REQUEST_TIME);
+      $changed = strtotime('-3 Month', REQUEST_TIME);
     break;
     case 4:
-      $changed = strtotime("-1 Month", REQUEST_TIME);
+      $changed = strtotime('-1 Month', REQUEST_TIME);
     break;
     case 5:
       $changed = REQUEST_TIME;
@@ -841,7 +850,7 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
     )->rowCount();
     
     //~ Delete data for users with uconfirmed emails
-    if($es_del_not_confimed){
+    if($es_del_not_confimed) {
       $usdel = db_select('email_subscribe_users', 'u')
       ->fields('u', array('sid'))
       ->condition('status', 1)
@@ -852,7 +861,7 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
       ->execute()
       ->fetchAllAssoc('sid');
       
-      if(sizeof($usdel) > 0){
+      if(sizeof($usdel) > 0) {
         $delRN = db_delete('email_subscribe_readed_nodes')
         ->condition('rn_sid', array_keys($usdel), 'IN')
         ->execute();
@@ -869,7 +878,7 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
     db_query('OPTIMIZE TABLE {email_subscribe_readed_nodes}');
     drupal_set_message(format_plural($sql, 'Was removed 1 row.', 'Was removed @count rows.'), 'warning');
   }
-  catch(Exception $e){
+  catch(Exception $e) {
     watchdog_exception('email-subscribe-error', $e);
     drupal_set_message(t('Error'), 'error');
   }
@@ -878,7 +887,7 @@ function email_subscribe_clean_database_form_submit($form, &$form_state){
 /**
  * Statistics page
  * */
-function email_subscribe_statistics_page(){
+function email_subscribe_statistics_page() {
   $out = '';
   $rows = array();
   
@@ -954,7 +963,7 @@ function email_subscribe_statistics_page(){
     t('The total number the subscribed users from other mail systems') => $otherMail.' ('.round($otherMail*100/$subsUser, 2).'%)',
   );
   
-  foreach($rowsArr as $key=>$val){
+  foreach($rowsArr as $key=>$val) {
     $rows[] = array(
       'data' => array(array('data'=>$key.':', 'style' => array('width:50%; text-align:right')), array('data'=>$val, 'class'=>array('es-bold'))),  
     );

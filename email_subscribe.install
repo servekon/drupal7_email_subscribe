@@ -9,14 +9,14 @@ function email_subscribe_install() {
 /**
  * Implementation of hook_install()
  */
-function email_subscribe_uninstall(){
+function email_subscribe_uninstall() {
 
 }
 
 /**
  * Implementation of hook_enable()
  */
-function email_subscribe_enable(){
+function email_subscribe_enable() {
   drupal_set_message(t('You need to set email templates for email subscribe module.').l(t('Configuration'), 'admin/config/services/email_subscribe/service').'.');
 }
 
@@ -71,16 +71,19 @@ function email_subscribe_schema() {
         'description'=> "Token to confirm unsubscribe(md5)"
       ),
       'date_subscribe' => array(
+        'type' => 'varchar',
         'mysql_type' => 'datetime',
         'not null' => FALSE,
         'description'=> "Date of when user confirm subscribe"
       ),
       'date_unsubscribe' => array(
+        'type' => 'varchar',
         'mysql_type' => 'datetime',
         'not null' => FALSE,
         'description'=> "Date of when user confirm unsubscribe"
       ),
       'date_resubscribe' => array(
+        'type' => 'varchar',
         'mysql_type' => 'datetime',
         'not null' => FALSE,
         'description'=> "Date of when user confirm re-subscribe"
@@ -148,7 +151,7 @@ function email_subscribe_schema() {
 /**
  * Change field format 'datechange' from datetime to int.
  */
-function email_subscribe_update_7101(){
+function email_subscribe_update_7101() {
   $field = array(
     'type' => 'int',
     'size' => 'big',
@@ -176,7 +179,7 @@ function email_subscribe_update_7101(){
 /**
  * Remove email_subscribe from queue list
  */
-function email_subscribe_update_7102(){
+function email_subscribe_update_7102() {
   db_delete('queue')->condition('name', 'email_subscribe')->execute();
 }
 
@@ -185,7 +188,7 @@ function email_subscribe_update_7102(){
  * 2. Update translation file.
  * 3. Update field "datechange"
  */
-function email_subscribe_update_7103(){
+function email_subscribe_update_7103() {
   //~ 1.
   $usdel = db_select('email_subscribe_users', 'u')
   ->fields('u', array('sid'))
@@ -193,7 +196,7 @@ function email_subscribe_update_7103(){
   ->execute()
   ->fetchAllAssoc('sid');
 
-  if(sizeof($usdel) > 0){
+  if(sizeof($usdel) > 0) {
     $delRN = db_delete('email_subscribe_readed_nodes')
     ->condition('rn_sid', array_keys($usdel), 'IN')
     ->execute();
@@ -222,7 +225,7 @@ function email_subscribe_update_7103(){
  * Delete records with subsribe_user_id(rn_sid) = 0 from the {email_subscribe_readed_nodes} table.
  * Version 1.0.5.1
  */
-function email_subscribe_update_7104(){
+function email_subscribe_update_7104() {
   db_delete('email_subscribe_readed_nodes')
   ->condition('rn_sid', 0)
   ->execute();
@@ -232,14 +235,14 @@ function email_subscribe_update_7104(){
  * Delete records for users with not confirmed email from the {email_subscribe_readed_nodes} table.
  * Version 1.0.5.2
  */
-function email_subscribe_update_7105(){
+function email_subscribe_update_7105() {
   $usdel = db_select('email_subscribe_users', 'u')
   ->fields('u', array('sid'))
   ->condition('status', 1)
   ->execute()
   ->fetchAllAssoc('sid');
 
-  if(sizeof($usdel) > 0){
+  if(sizeof($usdel) > 0) {
     $delRN = db_delete('email_subscribe_readed_nodes')
     ->condition('rn_sid', array_keys($usdel), 'IN')
     ->execute();
@@ -253,7 +256,7 @@ function email_subscribe_update_7105(){
 /**
  * Version 1.0.7
  */
-function email_subscribe_update_7106(){
+function email_subscribe_update_7106() {
   if (module_exists('locale')) {
     locale_system_update(array('email_subscribe'));
   }
